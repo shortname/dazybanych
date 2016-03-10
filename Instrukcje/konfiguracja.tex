@@ -15,10 +15,43 @@
 	\begin{Large}
 		DOKUMENT NIE JEST JESZCZE GOTOWY! DAM WAM ZNAĆ KIEDY BĘDZIE!
 	\end{Large}
-	\section{Potrzebne oprogramowanie}
+	\section{Do pobrania}
 	\begin{enumerate}
+		\item XAMPP (\url{https://www.apachefriends.org/pl/index.html})
 		\item GitHub (\url{https://desktop.github.com/})
 		\item NetBeans \textbf{dla PHP} {\url{https://netbeans.org/downloads/}}
-		\item XAMPP (\url{https://www.apachefriends.org/pl/index.html})
 	\end{enumerate}
+	\section{XAMPP}
+	\begin{enumerate}
+		\item Zainstaluj XAMPP`a
+		\item Otwórz \quotedblbase XAMPP Control Panel\textquotedblright
+		\item W linijce \quotedblbase Apache\textquotedblright wybierz \quotedblbase Start\textquotedblright
+		\item Wejdź do przeglądarki internetowej
+		\item Wejdź na \url{localhost} (ewentualnie \url{localhost:80}). Jeżeli zobaczyłeś stronę internetową, to znaczy, że się udało.
+	\end{enumerate}
+	\section{GitHub}
+	\begin{enumerate}
+		\item Załóż konto na \url{github.com}
+		\item Zostań dodany do projektu jako \emph{contributor}
+		\item Zainstaluj GitHuba i zaloguj się w nim
+		\item Wybierz  \quotedblbase +\textquotedblright w lewym górnym rogu okna, dalej \quotedblbase Clone\textquotedblright, \quotedblbase shortname\textquotedblright, \quotedblbase dazybanych\textquotedblright
+		\item Wybierz lokalizację
+		\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik apache\textbackslash conf\textbackslash extra\textbackslash httpd-vhosts.conf
+		\item Wklej na jego końcu kod, który znajdziesz w plikach z repo na ścieżce \textbackslash Instrukcje\textbackslash wklejka.txt (podmień XXX na ścieżkę do folderu Kod\textbackslash dazybanych w plikach z repo)
+		\item Jeśli jeszcze tego nie zrobiłeś, uruchom serwer \quotedblbase Apache\textquotedblright z poziomu \quotedblbase XAMPP Control Panel\textquotedblright
+		\item Wejdź do przeglądarki internetowej
+		\item Wejdź na \url{http://localhost}. Jeżeli zobaczyłeś stronę \quotedblbase Hello world!\textquotedblright, to znaczy, że się udało
+	\end{enumerate}
+	\section{NetBeans}
+	\begin{enumerate}
+		\item Zainstaluj NetBeans`a
+		\item Otwórz program i wybierz \quotedblbase Open project\textquotedblright
+		\item Wybierz w plikach z repo folder Kod\textbackslash dazybanych
+		\item Naciśnij F6 albo zieloną strzałkę w górnej części okna
+		\item Jeżeli zobaczyłeś \quotedblbase Hello world!\textquotedblright, to znaczy, że się udało 
+	\end{enumerate}
+	\section{Uwagi techniczne}
+	\begin{itemize}
+		\item Z poziomu NetBeans`a można komitować/pulować/puszować pliki, ale tylko z folderu Kod, pozostałe trzeba GitHub`em
+	\end{itemize}
 \end{document}
