@@ -27,7 +27,7 @@
 		\item Otwórz \quotedblbase XAMPP Control Panel\textquotedblright
 		\item W linijce \quotedblbase Apache\textquotedblright wybierz \quotedblbase Start\textquotedblright
 		\item Wejdź do przeglądarki internetowej
-		\item Wejdź na \url{localhost} (ewentualnie \url{localhost:80}). Jeżeli zobaczyłeś stronę internetową, to znaczy, że się udało.
+		\item Wejdź na \url{http://localhost} (ewentualnie \url{http://localhost:80}). Jeżeli zobaczyłeś stronę internetową, to znaczy, że się udało.
 	\end{enumerate}
 	\section{GitHub}
 	\begin{enumerate}
@@ -49,6 +49,31 @@
 		\item Wybierz w plikach z repo folder Kod\textbackslash dazybanych
 		\item Naciśnij F6 albo zieloną strzałkę w górnej części okna
 		\item Jeżeli zobaczyłeś \quotedblbase Hello world!\textquotedblright, to znaczy, że się udało 
+	\end{enumerate}
+	\section{MySQL Server}
+	\begin{enumerate}
+		\item Jeżeli jeszcze tego nie zrobiłeś, zainstaluj XAMPP`a
+		\item Otwórz \quotedblbase XAMPP Control Panel\textquotedblright
+		\item W linijce \quotedblbase MySQL\textquotedblright wybierz \quotedblbase Start\textquotedblright
+		\item Otwórz przeglądarkę internetową i wejdź na \url{http://localhost/phpmyadmin}. Jeżeli zobaczyłeś panel adminstracyjny bazy danych, to znaczy, że baza działa.
+		\item Wejdź w zakładkę \quotedblbase User accounts\textquotedblright, zaznacz wszystkich użytkowników poza \quotedblbase root\textquotedblright na \quotedblbase localhost\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright u dołu strony.
+		\item Po usunięciu pozostałych użytkowników kliknij \quotedblbase Edit privileges\textquotedblright przy pozostałym użytkowniku, wejdź w taba \quotedblbase Zmień hasło\textquotedblright, jako hasło podaj \quotedblbase admin\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright. Po ręcznym odświeżeniu strony powinieneś zobaczyć wielki czerwony komunikat o błędzie: \texttt{\quotedblbase Nie udało się nawiązać połączenia: błędne ustawienia.\textquotedblright}.
+		\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik phpMyAdmin\textbackslash config.inc.php
+		\item W znalezionym pliku jako zmień wartość przypisania:\\
+			\$cfg['Servers'][\$i]['password'] = '';\\
+			na 'admin'
+		\item Po odświeżeniu strony powinienieś na powrót zobaczyć panel administracyjny bazy danych
+		\item Otwórz NetBeans`a
+		\item W panelu \quotedblbase Projects\textquotedblright wybierz tab \quotedblbase Services\textquotedblright
+		\item Rozwiń \quotedblbase Databases\textquotedblright.
+		\item Na liście powinien się znaleźć \quotedblbase MySQL Server at localhost...\textquotedblright. Kliknij PPM i wybierz \quotedblbase Connect\textquotedblright (login: \quotedblbase root\textquotedblright, hasło: \quotedblbase admin\textquotedblright), a potem (ponownie PPM) \quotedblbase Create Database\textquotedblright. Jako nazwę podaj \quotedblbase sklep{\_}sportowy\textquotedblright. 
+		\item Wybierz \quotedblbase sklep{\_}sportowy\textquotedblright PPM, a następnie kliknij \quotedblbase Connect\textquotedblright
+		\item Jako login i hasło podaj kolejno \quotedblbase root\textquotedblright i \quotedblbase admin\textquotedblright. Na tej samej liście w bocznym panelu trochę niżej powinno się pojawić z kwadratową ikoną \quotedblbase jdbc:mysql{\_}localhost...\textquotedblright.
+		\item W NetBeans`ie wybierz \quotedblbase File\textquotedblright, dalej \quotedblbase Open File...\textquotedblright. Spośród plików z repo wybierz Baza Danych\textbackslash sklep{\_}sportowy.sql
+		\item W panelu edycji z listy \quotedblbase Connection\textquotedblright wybierz to, zawierające \quotedblbase sklep{\_}sportowy\textquotedblright w nazwie, a następnie wykonaj skrypt (kliknij pierwszą ikonkę na prawo od listy - \quotedblbase Run SQL\textquotedblright)
+		\item Zarówno w NetBeans w bocznym panelu, jak i w phpMyAdmin po odświeżeniu powinny się pojawić dwie tabele: \quotedblbase users\textquotedblright i \quotedblbase promocje\textquotedblright
+		\item Otwórz przeglądarkę i wejdź na \url{http://localhost/login.php}
+		\item Po zalogowaniu (\quotedblbase admin\textquotedblright, \quotedblbase admin\textquotedblright) powinieneś zobaczyć listę towarów. W przypadku podanych błędnych danych logowania powinieneś zostać wrócony na stronę logowania.
 	\end{enumerate}
 	\section{Uwagi techniczne}
 	\begin{itemize}
