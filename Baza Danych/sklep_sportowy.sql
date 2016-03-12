@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Czas generowania: 12 Mar 2016, 13:11
+-- Czas generowania: 12 Mar 2016, 16:06
 -- Wersja serwera: 10.1.10-MariaDB
 -- Wersja PHP: 5.6.19
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Baza danych: `sklep_sportowy`
 --
+CREATE DATABASE IF NOT EXISTS `sklep_sportowy` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `sklep_sportowy`;
 
 -- --------------------------------------------------------
 
@@ -38,10 +40,11 @@ CREATE TABLE `promocje` (
 --
 
 INSERT INTO `promocje` (`id`, `nazwa`, `cena`, `jednostka`) VALUES
-(1, 'Dr??ek aluminiowy', 12.5, 'kg'),
-(2, 'Glowka zoltej', 12.2, 'l'),
-(3, 'Główka żółtej', 12.2, 'l'),
-(4, 'Gżegżółka', 12.2, 'l');
+(1, 'Drążek aluminiowy', 12.5, 'kg'),
+(2, 'Główka żółtej', 12.2, 'l'),
+(3, 'Główka Żółtej', 12.2, 'l'),
+(4, 'Gżegżółka', 12.2, 'l'),
+(5, 'łóńćźżąśę', 4.8, 'ha');
 
 -- --------------------------------------------------------
 
@@ -87,12 +90,17 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT dla tabeli `promocje`
 --
 ALTER TABLE `promocje`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;--
+-- Baza danych: `test`
+--
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `test`;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
