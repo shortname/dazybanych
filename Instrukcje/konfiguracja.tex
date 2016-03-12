@@ -2,18 +2,111 @@
 \usepackage[utf8]{inputenc}
 \usepackage{polski}
 \usepackage[polish]{babel}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=red}
+\usepackage{listings}
 
 \title{Konfiguracja środowiska}
 \author{Jakub Dymon}
-\date{10.03.2016}
+\date{12.03.2016}
 
 \begin{document}
-	\section{OSTRZEŻENIE!!!}
-	\begin{Large}
-		DOKUMENT NIE JEST JESZCZE GOTOWY! DAM WAM ZNAĆ KIEDY BĘDZIE!
-	\end{Large}
-	\section{Potrzebne oprogramowanie}
+	\maketitle
+	\section{Do pobrania}
 	\begin{enumerate}
-		\item 
+		\item XAMPP (\url{https://www.apachefriends.org/pl/index.html})
+		\item GitHub (\url{https://desktop.github.com/})
+		\item NetBeans \textbf{dla PHP} {\url{https://netbeans.org/downloads/}}
+	\end{enumerate}
+	\section{XAMPP}
+	\begin{enumerate}
+		\item Zainstaluj XAMPP`a
+		\item Otwórz \quotedblbase XAMPP Control Panel\textquotedblright
+		\item W linijce \quotedblbase Apache\textquotedblright wybierz \quotedblbase Start\textquotedblright
+		\item Wejdź do przeglądarki internetowej
+		\item Wejdź na \url{http://localhost} (ewentualnie \url{http://localhost:80}). Jeżeli zobaczyłeś stronę internetową, to znaczy, że się udało.
+	\end{enumerate}
+	\section{GitHub}
+	\begin{enumerate}
+		\item Załóż konto na \url{github.com}
+		\item Zostań dodany do projektu jako \emph{contributor}
+		\item Zainstaluj GitHuba i zaloguj się w nim
+		\item Wybierz  \quotedblbase +\textquotedblright w lewym górnym rogu okna, dalej \quotedblbase Clone\textquotedblright, \quotedblbase shortname\textquotedblright, \quotedblbase dazybanych\textquotedblright
+		\item Wybierz lokalizację
+		\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik apache\textbackslash conf\textbackslash extra\textbackslash httpd-vhosts.conf
+		\item Wklej na jego końcu kod, który znajdziesz w plikach z repo na ścieżce \textbackslash Instrukcje\textbackslash wklejka.txt (podmień XXX na ścieżkę do folderu Kod\textbackslash dazybanych w plikach z repo; widoczny poniżej)
+		\lstinputlisting{wklejka.txt}
+		\item Jeśli jeszcze tego nie zrobiłeś, uruchom serwer \quotedblbase Apache\textquotedblright z poziomu \quotedblbase XAMPP Control Panel\textquotedblright
+		\item Wejdź do przeglądarki internetowej
+		\item Wejdź na \url{http://localhost}. Jeżeli zobaczyłeś stronę \quotedblbase Hello world!\textquotedblright, to znaczy, że się udało
+	\end{enumerate}
+	\section{NetBeans}
+	\begin{enumerate}
+		\item Zainstaluj NetBeans`a
+		\item Otwórz program i wybierz \quotedblbase Open project\textquotedblright
+		\item Wybierz w plikach z repo folder Kod\textbackslash dazybanych
+		\item Naciśnij F6 albo zieloną strzałkę w górnej części okna
+		\item Jeżeli zobaczyłeś \quotedblbase Hello world!\textquotedblright, to znaczy, że się udało 
+	\end{enumerate}
+	\section{MySQL Server}
+	\begin{enumerate}
+		\item Jeżeli jeszcze tego nie zrobiłeś, zainstaluj XAMPP`a
+		\item Otwórz \quotedblbase XAMPP Control Panel\textquotedblright
+		\item W linijkach \quotedblbase Apache\textquotedblright , \quotedblbase MySQL\textquotedblright wybierz \quotedblbase Start\textquotedblright
+		\item Otwórz przeglądarkę internetową i wejdź na \url{http://localhost/phpmyadmin}. Jeżeli zobaczyłeś panel adminstracyjny bazy danych, to znaczy, że baza działa.
+		\item Wejdź w zakładkę \quotedblbase User accounts\textquotedblright, zaznacz wszystkich użytkowników poza \quotedblbase root\textquotedblright na \quotedblbase localhost\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright u dołu strony.
+		\item Po usunięciu tych użytkowników kliknij \quotedblbase Edit privileges\textquotedblright przy pozostałym użytkowniku, wejdź w taba \quotedblbase Zmień hasło\textquotedblright, jako hasło podaj \quotedblbase admin\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright. Po ręcznym odświeżeniu strony powinieneś zobaczyć wielki czerwony komunikat o błędzie: \texttt{\quotedblbase Nie udało się nawiązać połączenia: błędne ustawienia.\textquotedblright}.
+		\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik phpMyAdmin\textbackslash config.inc.php
+		\item W znalezionym pliku jako zmień wartość przypisania:\\
+			\begin{lstlisting}
+$cfg['Servers'][$i]['password'] = '';
+			\end{lstlisting}
+			na 'admin'
+		\item Po odświeżeniu strony powinienieś na powrót zobaczyć panel administracyjny bazy danych
+		%Wykreśliłem, bo NetBeans ma spore problemy z kodowaniem plików SQL wygenerowanych przez phpMyAdmin
+		\item W panelu bocznym wybierz \quotedblbase Nowa\textquotedblright i stwórz bazę \quotedblbase sklep{\_}sportowy\textquotedblright z metodą porównywania napisów \quotedblbase utf8{\_}unicode{\_}ci\textquotedblright
+		\item Wejdź do nowo utworzonej bazy, z górnego menu wybierz \quotedblbase Import\textquotedblright. W widoku importu wybierz plik z repo Baza Danych\textbackslash sklep{\_}sportowy.sql, upewnij się, że ustawione jest kodowanie \quotedblbase utf-8\textquotedblright. Kliknij \quotedblbase Wykonaj\textquotedblright.
+		\item Wejdź do tabeli \quotedblbase promocje\textquotedblright i sprawdź, czy wszystkie rekordy mają polskie znaki. Jeśli nie, to spędź następne dwie godziny na szukaniu rozwiązania problemu z kodowaniem ;-).
+		\item Otwórz przeglądarkę i wejdź na \url{http://localhost/login.php}
+		\item Po zalogowaniu (\quotedblbase admin\textquotedblright, \quotedblbase admin\textquotedblright) powinieneś zobaczyć listę towarów. W przypadku podanych błędnych danych logowania powinieneś zostać wrócony na stronę logowania. Wszystkie polskie znaki powinny być wyświetlane poprawnie.
+		\item GRATULACJE! Właśnie postawiłeś środowisko potrzebne do projektu z baz danych.
+	\end{enumerate}
+	\section{Uwagi techniczne}
+	\begin{itemize}
+		\item Z poziomu NetBeans`a można komitować/pulować/puszować pliki, ale tylko z folderu Kod, pozostałe trzeba GitHub`em.
+		\item Początkowo chciałem importować do bazy pliki .sql z poziomu NetBeans`a, jednak jest tam problem z rozkodowywaniem plików sql generowanych przez phpMyAdmin - we wszystkich innych edytorach (nawet windowsowym notatniku) nie ma z tym problemu. Ten problem dotyczy rzeczy niepisanych w NetBeans`ie, tak więc spokojnie nadaje się on do ręcznego pisania i testowania zapytań, czy nawet tworzenia własnych plików SQL i importowania ich wtedy z poziomu NetBeans`a. Poniżej zamieściłem instrukcję, jak się w NetBeans`ie połączyć z bazą danych.
+		\item Jeżeli w phpMyAdmin wyświetlają się poprawnie polskie znaki, a na stronie php już nie, to najprawdopodobniej brakuje Ci na początku klamry php linijki:\\
+\begin{lstlisting}[language=PHP]		
+mysql_set_charset("utf8");
+\end{lstlisting}
+		BEZ MYŚLNIKA! (\quotedblbase utf-8\textquotedblright nie zadziała)
+		albo:
+\lstset{
+	breaklines=true
+}
+\begin{lstlisting}[language=HTML]
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+\end{lstlisting}		
+		w bloku head części HTML
+		\item Plik login.php pisałem wg PHP5 na szybko i na pewno da się to napisać ładniej. Niemniej jednak jestem przekonany, że zawiera on jakieś 90\% instrukcji PHP, jakich w ogóle użyjemy, bo całą logikę ma za nas załatwiać baza.
+		\item Co będzie nam potrzebne jeżeli idzie o techhnologie:
+		\begin{itemize}
+			\item HTML (\url{http://www.kurshtml.edu.pl/}, \url{http://www.w3schools.com/html/default.asp} - przede wszystkim formularze i tabelki oraz znaczniki typu \texttt{div})
+			\item PHP (\url{http://php.net/}) - przede wszystkim obsługa formularzy (GET, POST), obsługa bazy danych (instrukcje z pliku login.php), instrukcje warunkowe, pętle, \texttt{echo}/\texttt{print}
+			\item SQL (\url{http://www.w3schools.com/sql/default.asp}) - wszystko, wersja MySQL
+			\item Inne, o których jeszcze nie wiem, a które będą na wykładzie
+		\end{itemize}
+	\end{itemize}
+	\section{NetBeans a sprawa bazodanowa}
+	\begin{enumerate}
+		\item Otwórz NetBeans`a
+		\item W panelu \quotedblbase Projects\textquotedblright wybierz tab \quotedblbase Services\textquotedblright
+		\item Rozwiń \quotedblbase Databases\textquotedblright.
+		\item Na liście powinien się znaleźć \quotedblbase MySQL Server at localhost...\textquotedblright. Kliknij PPM i wybierz \quotedblbase Connect\textquotedblright (login: \quotedblbase root\textquotedblright, hasło: \quotedblbase admin\textquotedblright), a potem (ponownie PPM) \quotedblbase Create Database\textquotedblright. Jako nazwę podaj \quotedblbase sklep{\_}sportowy\textquotedblright. 
+		\item Wybierz \quotedblbase sklep{\_}sportowy\textquotedblright PPM, a następnie kliknij \quotedblbase Connect\textquotedblright
+		\item Jako login i hasło podaj kolejno \quotedblbase root\textquotedblright i \quotedblbase admin\textquotedblright. Na tej samej liście w bocznym panelu trochę niżej powinno się pojawić z kwadratową ikoną \quotedblbase jdbc:mysql{\_}localhost...sklep{\_}sportowy...\textquotedblright.
+		\item Możesz wykonać komendy \quotedblbase ręcznie\textquotedblright klikając PPM na\\
+		\quotedblbase jdbc:mysql{\_}localhost...sklep{\_}sportowy...\textquotedblright\\
+		 w panelu bocznym i wybierając \quotedblbase Execute Command\textquotedblright albo możesz otworzyć plik SQL (\quotedblbase File\textquotedblright, \quotedblbase Open File...\textquotedblright) i tam wybrać bazę z listy \quotedblbase Connection\textquotedblright 
 	\end{enumerate}
 \end{document}
