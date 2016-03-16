@@ -3,13 +3,13 @@
 \usepackage{polski}
 \usepackage[polish]{babel}
 \usepackage{geometry}
+\usepackage{fontspec}
 \geometry{margin=3cm}
-
 
 \title{Opis zadania projektowego}
 \author{Tomasz Bartos, Jakub Dymon, Wiktor Gerstenstein}
 %dopisać numery indeksów
-\date{10 marca 2016}
+\date{16 marca 2016}
 
 \begin{document}
 \maketitle
@@ -21,6 +21,7 @@ System będzie pozwalał sprzedawcy na dodawanie towarów do sklepu, wystawianie
 Aplikacja będzie dostępna w formie strony internetowej umieszczonej na serwerze i dostępnej po zalogowaniu. Będzie istniała możliwość założenia konta w dwóch wariantach - handlowca i klienta - i zależnie od rodzaju konta będzie użytkownikowi udostępniana określona wersja serwisu.
 %Nie za dużo?
 \section{Założenia architektoniczne przyjęte podczas realizacji systemu}
+System będzie realizowany w oparciu o relacyjną bazę danych MySQL oraz interfejs dostępowy utworzony w języku PHP. Operacje dostępowe oraz przetwarzanie danych będą się odbywać po stronie bazy danych, natomiast dla klienta udostępnione zostanie graficzne środowisko dostępowe umożliwiające wydawanie żądanych zapytań. Klient będzie miał możliwość sprawdzenia wybranych zawartości tabel, modyfikacji danych oraz ich usuwania. Wykonywanie poleceń w systemie bazodanowym nie będzie wymagało od użytkownika znajomości języka SQL.
 \section{Wykorzystywane technologie, narzędzia projektowania oraz implementacji systemu}
 Technologie:
 \begin{itemize}
