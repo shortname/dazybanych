@@ -3,7 +3,7 @@
 \usepackage{polski}
 \usepackage[polish]{babel}
 \usepackage{geometry}
-\usepackage{fontspec}
+%\usepackage{fontspec}
 \geometry{margin=3cm}
 
 \title{Opis zadania projektowego}
@@ -19,7 +19,6 @@ Cel projektu: projekt oraz implementacja aplikacji webowej imitującej sklep int
 \section{Opis działania i funkcje systemu}
 System będzie pozwalał sprzedawcy na dodawanie towarów do sklepu, wystawianie ich do sprzedaży, kontrolę ilości towaru dostępnej na magazynie oraz generowanie prostych raportów na temat sprzedaży, natomiast kupującemu możliwość wyszukiwania towaru, jego zakupu i listowania dokonanych zakupów oraz statusu zamówienia.\\
 Aplikacja będzie dostępna w formie strony internetowej umieszczonej na serwerze i dostępnej po zalogowaniu. Będzie istniała możliwość założenia konta w dwóch wariantach - handlowca i klienta - i zależnie od rodzaju konta będzie użytkownikowi udostępniana określona wersja serwisu.
-%Nie za dużo?
 \section{Założenia architektoniczne przyjęte podczas realizacji systemu}
 System będzie realizowany w oparciu o relacyjną bazę danych MySQL oraz interfejs dostępowy utworzony w języku PHP. Operacje dostępowe oraz przetwarzanie danych będą się odbywać po stronie bazy danych, natomiast dla klienta udostępnione zostanie graficzne środowisko dostępowe umożliwiające wydawanie żądanych zapytań. Klient będzie miał możliwość sprawdzenia wybranych zawartości tabel, modyfikacji danych oraz ich usuwania. Wykonywanie poleceń w systemie bazodanowym nie będzie wymagało od użytkownika znajomości języka SQL.
 \section{Wykorzystywane technologie, narzędzia projektowania oraz implementacji systemu}
@@ -33,7 +32,7 @@ Technologie:
 \end{itemize}
 Narzędzia projektowania:
 \begin{itemize}
-	\item %Narzędzie Wiktora
+	\item MySQL 5.7.11
 \end{itemize}
 Narzędzia implementacji systemu:
 \begin{itemize}
@@ -43,4 +42,11 @@ Narzędzia implementacji systemu:
 \end{itemize}
 \section{Schemat komunikacji, struktura systemu}
 \section{Literatura}
+\begin{enumerate}
+	\item Kierzkowski A., \textit{PHP5. Tworzenie stron WWW}, Helion, Gliwice 2006
+	\item http://www.kurshtml.edu.pl/
+	\item http://php.net/
+	\item http://www.w3schools.com/html/default.asp
+	\item http://www.w3schools.com/sql/default.asp
+\end{enumerate}
 \end{document}
