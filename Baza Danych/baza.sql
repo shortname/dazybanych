@@ -283,13 +283,6 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`platnosci` (
 ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `sklepbd`.`table1`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`table1` (
-)
-ENGINE = InnoDB;
-
 USE `sklepbd` ;
 
 -- -----------------------------------------------------
