@@ -283,28 +283,6 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`platnosci` (
 ENGINE = InnoDB;
 
 
-USE `sklepbd` ;
-
--- -----------------------------------------------------
--- Placeholder table for view `sklepbd`.`sprzedazWSklepach`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`sprzedazWSklepach` (`store` INT, `manager` INT, `total_sales` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `sklepbd`.`listaProduktow`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`listaProduktow` (`FID` INT, `title` INT, `description` INT, `category` INT, `price` INT, `length` INT, `rating` INT, `actors` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `sklepbd`.`listaKlientow`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`listaKlientow` (`ID` INT, `name` INT, `address` INT, `zip code` INT, `phone` INT, `city` INT, `country` INT, `notes` INT, `SID` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `sklepbd`.`listaPersonelu`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`listaPersonelu` (`ID` INT, `name` INT, `address` INT, `zip code` INT, `phone` INT, `city` INT, `country` INT, `SID` INT);
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
