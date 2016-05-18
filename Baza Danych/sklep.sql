@@ -87,16 +87,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sklepbd`.`magazyny` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `idKierownik` INT UNSIGNED NOT NULL,
   `idAdres` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `idKierownik_UNIQUE` (`idKierownik` ASC),
   INDEX `index3` (`idAdres` ASC),
-  CONSTRAINT `fk_sklepy_1`
-    FOREIGN KEY (`idKierownik`)
-    REFERENCES `sklepbd`.`personel` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_sklepy_2`
     FOREIGN KEY (`idAdres`)
     REFERENCES `sklepbd`.`adresy` (`id`)
@@ -116,6 +109,7 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`personel` (
   `idAdres` INT UNSIGNED NOT NULL,
   `idKontakt` INT UNSIGNED NOT NULL,
   `idMagazyn` INT UNSIGNED NOT NULL,
+  `kierownik` INT(1) NOT NULL,
   `dataZmiany` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `index2` (`idKontoLogowania` ASC),
