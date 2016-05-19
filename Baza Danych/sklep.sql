@@ -322,7 +322,7 @@ INSERT INTO `personel`(`id`, `Imie`, `Nazwisko`, `idKontoLogowania`, `idAdres`, 
 #producenci
 INSERT INTO `producenci`(`id`, `nazwaProducenta`) VALUES
 (1, 'WIERTEX'),
-(2, 'WINDPOL'),
+(2, 'PRO ONE'),
 (3, 'ZIMBABWE CONTINENTAL'),
 (4, 'TRANSBARD'),
 (5, 'MKPZ WISŁA'),

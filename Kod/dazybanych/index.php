@@ -8,7 +8,9 @@ if(!$db){
     die("<h1>Database error</h1>");
 }
 mysql_set_charset("utf8");
-$wareList = "SELECT "
+function wareList(){
+    $filter = '';
+    return "SELECT "
             . "SUM(zop.ilosc) ilosc, "
             . "pdk.*, "
             . "pdc.nazwaProducenta "
@@ -22,12 +24,15 @@ $wareList = "SELECT "
             . "zaopatrzenie zop "
         . "ON "
             . "zop.idProduktu = pdk.id "
+        . $filter
         . "GROUP BY "
             . "pdk.id;";
+}
 $producers = "SELECT
     t.*
 FROM
     (SELECT
+        pdc.id id,
         pdc.nazwaProducenta,
         SUM(`ilosc`) ilosc
     FROM
@@ -48,6 +53,7 @@ $categories = "SELECT
     t.*
 FROM
     (SELECT
+        kat.id id,
         kat.nazwaKategorii,
         SUM(`ilosc`) ilosc
     FROM
@@ -73,7 +79,7 @@ WHERE
     <body>
         <div id="list" style="width:75%;">
         <?php
-        $wynik = mysql_query($wareList);
+        $wynik = mysql_query(wareList());
         print "<table>"
             . "<thead>"
                     . "<tr><th>Nazwa</th><th>Producent</th><th>Opis</th><th>Cena brutto</th><th>Dostępne</th></tr>"
@@ -96,24 +102,26 @@ WHERE
                 <?php
                     $wynik = mysql_query($producers);
                     while($rekord = mysql_fetch_assoc($wynik)){
+                        $id = $rekord['id'];
                         $name = $rekord['nazwaProducenta'];
-                        $index = "producer_" . $rekord['nazwaProducenta'];
-                        $value = false;
-                        if(isset($_GET[$index]) && $_GET[$index] == true)
-                            $value = true;
-                        print "<input type='checkbox' name='producer_". $name ."' value='false' checked='".$value."' />" . $name . "<br />";
+                        $index = "producer_" . $id;
+                        $value = '';
+                        if(isset($_GET[$index]) && $_GET[$index] == $id)
+                            $value = 'checked=\'true\'';
+                        print "<input type='checkbox' name='". $index ."' value='".$id."' ".$value."' />" . $name . "<br />";
                     }
                 ?>
                 <h2>Kategoria</h2>
                 <?php
                     $wynik = mysql_query($categories);
                     while($rekord = mysql_fetch_assoc($wynik)){
+                        $id = $rekord['id'];
                         $name = $rekord['nazwaKategorii'];
-                        $index = "category_" . $rekord['nazwaKategorii'];
-                        $value = false;
-                        if(isset($_GET[$index]))
-                            $value = $_GET[$index];
-                        print "<input type='checkbox' name='category_". $name ."' value='".$value."' />" . $name . "<br />";
+                        $index = "category_" . $id;
+                        $value = '';
+                        if(isset($_GET[$index]) && $_GET[$index] == $id)
+                            $value = 'checked=\'true\'';
+                        print "<input type='checkbox' name='". $index ."' value='".$id."' ".$value."' />" . $name . "<br />";
                     }
                 ?>
                 <input type='submit' value="Filtruj" />
