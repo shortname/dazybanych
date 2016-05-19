@@ -104,11 +104,11 @@ WHERE
                     while($rekord = mysql_fetch_assoc($wynik)){
                         $id = $rekord['id'];
                         $name = $rekord['nazwaProducenta'];
-                        $index = "producer_" . $id;
+                        $index = "producer";
                         $value = '';
-                        if(isset($_GET[$index]) && $_GET[$index] == $id)
+                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
                             $value = 'checked=\'true\'';
-                        print "<input type='checkbox' name='". $index ."' value='".$id."' ".$value."' />" . $name . "<br />";
+                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
                     }
                 ?>
                 <h2>Kategoria</h2>
@@ -117,11 +117,11 @@ WHERE
                     while($rekord = mysql_fetch_assoc($wynik)){
                         $id = $rekord['id'];
                         $name = $rekord['nazwaKategorii'];
-                        $index = "category_" . $id;
+                        $index = "category";
                         $value = '';
-                        if(isset($_GET[$index]) && $_GET[$index] == $id)
+                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
                             $value = 'checked=\'true\'';
-                        print "<input type='checkbox' name='". $index ."' value='".$id."' ".$value."' />" . $name . "<br />";
+                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
                     }
                 ?>
                 <input type='submit' value="Filtruj" />
