@@ -30,6 +30,17 @@ public class ListaTowarowTest extends SeleniumTest{
         	Assertions.assertThat(findProducers(entry.getKey())).contains(entry.getValue());
         }
     }
+    
+    @Test
+    public void shouldFindCategoryNames(){
+        //given
+        Map<String, String> expected = db.findProductsWithCategoryId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findCategory(entry.getValue())));
+        
+        //when
+        for(Map.Entry<String, String> entry : expected.entrySet()){
+        	Assertions.assertThat(findCategories(entry.getKey())).contains(entry.getValue());
+        }
+    }
 
 
 
