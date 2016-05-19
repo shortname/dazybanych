@@ -281,6 +281,26 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+######WIDOKI
+CREATE VIEW `lista_towarow` AS
+  SELECT
+        pdk.id idProduktu,
+        zop.ilosc ilosc,
+        pdk.nazwa,
+        pdk.opis,
+        pdk.cenaBrutto,
+        pdc.nazwaProducenta
+    FROM
+        produkty pdk
+    JOIN
+        producenci pdc
+    ON
+        pdk.idProducenta = pdc.id
+    LEFT JOIN
+        zaopatrzenie zop
+    ON
+        zop.idProduktu = pdk.id;
+
 #####DANE TESTOWE
 #konta logowania
 INSERT INTO `kontaLogowania` (`id`, `login`, `sha256Haslo`) VALUES
