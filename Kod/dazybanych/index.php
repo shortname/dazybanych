@@ -142,7 +142,7 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                         $zamowienie = "";
                         if($ilosc != NULL)
                             $zamowienie = "<input type='number' name='order_$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
-                        print "<tr><td>$kategoria</td><td>$nazwa<br /><span style='font-size:10pt;'>$opis</span></td><td>$producent</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
+                        print "<tr><td>$kategoria</td><td><span id='nazwa'>$nazwa</span><br /><span style='font-size:10pt;'>$opis</span></td><td id='producent'>$producent</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
                     }
                     print "</tbody></table></body></html>";
                 ?>
