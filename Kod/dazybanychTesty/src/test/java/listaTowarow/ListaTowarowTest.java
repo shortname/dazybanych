@@ -1,5 +1,6 @@
 package listaTowarow;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import utils.DBConnector;
@@ -16,15 +17,18 @@ public class ListaTowarowTest extends SeleniumTest{
     public void init(){
         super.init();
         db = new DBConnector();
+        getTo("/");
     }
 
     @Test
     public void shouldFindProducerNames(){
         //given
         Map<String, String> expected = db.findProductsWithProducerId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findProducer(entry.getValue())));
-        findProducers().forEach(System.out::println);
+        
         //when
-
+        for(Map.Entry<String, String> entry : expected.entrySet()){
+        	Assertions.assertThat(findProducers(entry.getKey())).contains(entry.getValue());
+        }
     }
 
 
