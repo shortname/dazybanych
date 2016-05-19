@@ -38,6 +38,10 @@ public class SeleniumTest {
     protected List<String> findCategories(String name){
         return webDriver.findElements(By.xpath("//*[contains(span, '" +name+ "')]/../td[@id='kategoria']")).stream().map(we -> we.getText()).collect(Collectors.toList());
     }
+    
+    protected List<String> findAmounts(String name){
+        return webDriver.findElements(By.xpath("//*[contains(span, '" +name+ "')]/../td[@id='ilosc']")).stream().map(we -> we.getText()).collect(Collectors.toList());
+    }
 
     protected List<String> findProducers(){
         return webDriver.findElements(By.id("producent")).stream().map(WebElement::getText).collect(Collectors.toList());

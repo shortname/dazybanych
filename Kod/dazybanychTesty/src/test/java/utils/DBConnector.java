@@ -20,7 +20,7 @@ public class DBConnector {
             mysql = new com.mysql.jdbc.Driver();
             DriverManager.registerDriver(mysql);
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            statement = connection.createStatement();
+            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -39,6 +39,34 @@ public class DBConnector {
                 String name = wares.getString("nazwa");
                 Integer producerId = wares.getInt("idProducenta");
                 result.put(name, producerId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    
+    public Map<String, Integer> findProductsWithAmount(){
+        ResultSet wares = null, amounts = null;
+        try {
+            wares = execute("SELECT * FROM produkty;");
+            amounts = execute("SELECT * FROM zaopatrzenie;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Map<String, Integer> result = new HashMap<>();
+        try {
+            while(wares.next()){
+                String name = wares.getString("nazwa");
+                int id = wares.getInt("id");
+                int amount = 0;
+                amounts.first();
+                while(amounts.next()){
+                	if(amounts.getInt("idProduktu") == id){
+                		amount += amounts.getInt("ilosc");
+                	}
+                }
+                result.put(name, amount);
             }
         } catch (SQLException e) {
             e.printStackTrace();

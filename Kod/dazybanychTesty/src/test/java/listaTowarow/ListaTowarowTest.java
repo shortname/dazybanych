@@ -2,6 +2,7 @@ package listaTowarow;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import utils.DBConnector;
 import utils.SeleniumTest;
@@ -39,6 +40,18 @@ public class ListaTowarowTest extends SeleniumTest{
         //when
         for(Map.Entry<String, String> entry : expected.entrySet()){
         	Assertions.assertThat(findCategories(entry.getKey())).contains(entry.getValue());
+        }
+    }
+    
+    @Test
+    @Ignore
+    public void shouldFindAmounts(){
+        //given
+        Map<String, String> expected = db.findProductsWithAmount().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findCategory(entry.getValue())));
+        
+        //when
+        for(Map.Entry<String, String> entry : expected.entrySet()){
+        	Assertions.assertThat(findAmounts(entry.getKey())).contains(entry.getValue());
         }
     }
 
