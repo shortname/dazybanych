@@ -146,7 +146,18 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                     }
                     print "</tbody></table></body></html>";
                 ?>
-                <input type="submit" value="Zamów" />
+                <div style="display: inline-block;">
+                    <input type="radio" name="payment" value="card"/> Karta<br />
+                </div>
+                <div style="display: inline-block;">
+                    <input type="radio" name="payment" value="cash"/> Gotówka<br />
+                </div>
+                <div style="display: inline-block;">
+                    <input type="radio" name="payment" value="transfer"/> Przelew<br />
+                </div><br />
+                <div style="display: inline-block;">
+                    <input type="submit" value="Zamów" />
+                </div>
             </form>
         </div>
         <div id='filter' style='width:20%; position: fixed; top:0px; right:0px;'>

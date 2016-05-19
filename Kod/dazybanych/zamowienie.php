@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<?php
+if(isset($_POST['salesman']) && isset($_POST['client'])){
+    
+}else{
+    print "Niepoprawne zamówienie!<br />"
+    . "<a href='index.php'>Powrót</a>";
+}
+?>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -11,7 +13,15 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        // put your code here
+            if(isset($_POST['salesman']) && isset($_POST['client'])){
+                $client = $_POST['client'];
+                $salesman = $_POST['salesman'];
+                print "<b>Zamawiający: $client</b><br />"
+                        . "<b>Sprzedawca: $salesman</b></b>";
+            }else{
+                print "Niepoprawne zamówienie!<br />"
+                . "<a href='index.php'>Powrót</a>";
+            }
         ?>
     </body>
 </html>
