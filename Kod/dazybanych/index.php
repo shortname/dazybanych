@@ -10,23 +10,37 @@ if(!$db){
 mysql_set_charset("utf8");
 function wareList(){
     $filter = '';
-    return "SELECT "
-            . "SUM(zop.ilosc) ilosc, "
-            . "pdk.*, "
-            . "pdc.nazwaProducenta "
-        . "FROM "
-            . "produkty pdk "
-        . "JOIN "
-            . "producenci pdc "
-        . "ON "
-            . "pdk.idProducenta = pdc.id "
-        . "LEFT JOIN "
-            . "zaopatrzenie zop "
-        . "ON "
-            . "zop.idProduktu = pdk.id "
-        . $filter
-        . "GROUP BY "
-            . "pdk.id;";
+    if(isset($_GET['producer'])){
+        $producers = $_GET['producer'];
+        $filter .= "WHERE (";
+        foreach($producers as $key => $value){
+            if($key != 0)
+                $filter.="OR ";
+            $filter .= "idProducenta = $value ";
+        }
+        $filter .= ")";
+    }
+    if(isset($_GET['category'])){
+        $producers = $_GET['category'];
+        if(strlen($filter) == 0)
+            $filter .= 'WHERE (';
+        else
+            $filter .= "AND (";
+        foreach($producers as $key => $value){
+            if($key != 0)
+                $filter.="OR ";
+            $filter .= "idKategorii = $value ";
+        }
+        $filter .= ")";
+    }
+    return "SELECT
+      *,
+      SUM(ilosc) ilosc
+    FROM
+        `lista_towarow`
+    ".$filter."
+    GROUP BY
+      idProduktu;";
 }
 $producers = "SELECT
     t.*
@@ -80,18 +94,19 @@ WHERE
         <div id="list" style="width:75%;">
         <?php
         $wynik = mysql_query(wareList());
-        print "<table>"
+        print "<table style='border: 1px solid black; width:100%;'>"
             . "<thead>"
-                    . "<tr><th>Nazwa</th><th>Producent</th><th>Opis</th><th>Cena brutto</th><th>Dostępne</th></tr>"
+                    . "<tr><th>Kategoria</th><th>Nazwa</th><th>Producent</th><th>Opis</th><th>Cena brutto</th><th>Dostępne</th></tr>"
                     . "</thead"
                     . "<tbody>";
             while($rekord = mysql_fetch_assoc($wynik)){
                 $nazwa = $rekord['nazwa'];
                 $producent = $rekord['nazwaProducenta'];
+                $kategoria = $rekord['nazwaKategorii'];
                 $opis = $rekord['opis'];
                 $cenaBrutto = $rekord['cenaBrutto'];
                 $ilosc = $rekord['ilosc'];
-                print "<tr><td>$nazwa</td><td>$producent</td><td>$opis</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td></tr>";
+                print "<tr><td>$kategoria</td><td>$nazwa</td><td>$producent</td><td>$opis</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td></tr>";
             }
             print "</tbody></table></body></html>";
         ?>

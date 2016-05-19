@@ -289,13 +289,20 @@ CREATE VIEW `lista_towarow` AS
         pdk.nazwa,
         pdk.opis,
         pdk.cenaBrutto,
-        pdc.nazwaProducenta
+        pdc.nazwaProducenta,
+        pdk.idProducenta,
+        kat.nazwaKategorii,
+        pdk.idKategorii
     FROM
         produkty pdk
     JOIN
         producenci pdc
     ON
         pdk.idProducenta = pdc.id
+    JOIN
+        kategorie kat
+    ON
+        pdk.idKategorii = kat.id
     LEFT JOIN
         zaopatrzenie zop
     ON
