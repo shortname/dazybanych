@@ -84,32 +84,70 @@ FROM
         kat.id) t
 WHERE
     t.ilosc != 0;";
+$clients = "SELECT id, imie, nazwisko FROM klienci ORDER BY nazwisko;";
+$salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
 ?>
 <html>
         <head>
             <title>Sklep</title>
             <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+            <link rel="stylesheet" type="text/css" href="style/lista_towarow.css"/>
         </head>
     <body>
         <div id="list" style="width:75%;">
-        <?php
-        $wynik = mysql_query(wareList());
-        print "<table style='border: 1px solid black; width:100%;'>"
-            . "<thead>"
-                    . "<tr><th>Kategoria</th><th>Nazwa</th><th>Producent</th><th>Opis</th><th>Cena brutto</th><th>Dostępne</th></tr>"
-                    . "</thead"
-                    . "<tbody>";
-            while($rekord = mysql_fetch_assoc($wynik)){
-                $nazwa = $rekord['nazwa'];
-                $producent = $rekord['nazwaProducenta'];
-                $kategoria = $rekord['nazwaKategorii'];
-                $opis = $rekord['opis'];
-                $cenaBrutto = $rekord['cenaBrutto'];
-                $ilosc = $rekord['ilosc'];
-                print "<tr><td>$kategoria</td><td>$nazwa</td><td>$producent</td><td>$opis</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td></tr>";
-            }
-            print "</tbody></table></body></html>";
-        ?>
+            <form method="POST" action="zamowienie.php">
+                <div  style="width:49%; display: inline-block;">
+                    Klient:
+                    <select name="client" style="width:100%;">
+                        <?php
+                            $wynik = mysql_query($clients);
+                            while($rekord = mysql_fetch_assoc($wynik)){
+                                $imie = $rekord['imie'];
+                                $nazwisko = $rekord['nazwisko'];
+                                $id = $rekord['id'];
+                                print "<option value='$id'>$imie $nazwisko</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+                <div style="width:49%; display: inline-block;">
+                    Sprzedawca:
+                    <select name="salesman" style="width:100%">
+                        <?php
+                            $wynik = mysql_query($salesmen);
+                            while($rekord = mysql_fetch_assoc($wynik)){
+                                $imie = $rekord['imie'];
+                                $nazwisko = $rekord['nazwisko'];
+                                $id = $rekord['id'];
+                                print "<option value='$id'>$imie $nazwisko</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+                <?php
+                $wynik = mysql_query(wareList());
+                print "<table class='border' style='width:100%;'>"
+                    . "<thead>"
+                            . "<tr><th>Kategoria</th><th>Nazwa</th><th>Producent</th><th>Cena brutto</th><th>Dostępne</th><th>Zamówienie</th></tr>"
+                            . "</thead"
+                            . "<tbody>";
+                    while($rekord = mysql_fetch_assoc($wynik)){
+                        $id = $rekord['idProduktu'];
+                        $nazwa = $rekord['nazwa'];
+                        $producent = $rekord['nazwaProducenta'];
+                        $kategoria = $rekord['nazwaKategorii'];
+                        $opis = $rekord['opis'];
+                        $cenaBrutto = $rekord['cenaBrutto'];
+                        $ilosc = $rekord['ilosc'];
+                        $zamowienie = "";
+                        if($ilosc != NULL)
+                            $zamowienie = "<input type='number' name='order_$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
+                        print "<tr><td>$kategoria</td><td>$nazwa<br /><span style='font-size:10pt;'>$opis</span></td><td>$producent</td><td>$cenaBrutto</td><td>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
+                    }
+                    print "</tbody></table></body></html>";
+                ?>
+                <input type="submit" value="Zamów" />
+            </form>
         </div>
         <div id='filter' style='width:20%; position: fixed; top:0px; right:0px;'>
             <form method='GET' action='index.php'>
