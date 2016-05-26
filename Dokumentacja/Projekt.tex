@@ -71,6 +71,32 @@ Schemat logiczny systemu znajduje się na Rysunku \ref{fig:schematLogiczny}
 
 \subsection{Wymagania funkcjonalne}
 \subsubsection{Diagram przypadków użycia}
+Diagram przypadków użycia zamieszczony został na Rysunku \ref{fig:diagramPrzypadkowUzycia}.
+Funkcjonalności dla poszczególnych użytkowników systemu zebrano w Tablicy \ref{tab:tabelaPrzypadkowUzycia}
+
+\begin{table}[H]
+	\caption[Tabela przypadków użycia]{Przypadki użycia dla poszczególnych użytkowników}
+	\label{tab:tabelaPrzypadkowUzycia}
+		\hskip-1.5cm\begin{tabular}{ l c c c c }
+			Operacja/Użytkownik & Sprzedawca & Kierownik & Klient & Administrator \\ \hline 
+			Zarządzanie kontami użytkowników & Tak & Nie & Nie & Nie \\ \hline
+			Sprzedawanie towaru & Tak & Nie & Nie & Nie \\ \hline 
+			Zarządzanie towarami w magazynie & Nie & Tak & Nie & Nie \\ \hline 
+			Zarządzanie sprzedawcami & Nie & Tak & Nie & Nie \\ \hline 
+			Zarządzanie kierownikami & Nie & Nie & Nie & Tak \\ \hline 
+			Przeglądanie raportów\\ sprzedaży & Nie & Tak & Nie & Tak \\ \hline 
+			Przeglądanie listy towarów & Nie & Nie & Tak & Nie \\ \hline
+			Przeglądanie listy zakupów & Nie & Nie & Tak & Nie \\ \hline
+			Zakup towarów & Nie & Nie & Tak & Nie \\ \hline								
+		\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\includegraphics[height=9cm]{diagram_przypadkow_uzycia.jpg}
+	\caption[Diagram przypadków użycia]{Diagram przypadków użycia}
+	\label{fig:diagramPrzypadkowUzycia}
+\end{figure}
+
 \subsubsection{Scenariusze wybranych przypadków użycia}
 
 \subsection{Wymagania niefunkcjonalne}
@@ -136,12 +162,8 @@ Narzędzia implementacji systemu:
 \subsection{Wnioski z testów}
 \section{Podsumowanie}
 
-\section{Literatura}
-\begin{enumerate}[label={[\arabic*]}]
-	\item Kierzkowski A., \textit{PHP5. Tworzenie stron WWW}, Helion, Gliwice 2006
-	\item http://www.kurshtml.edu.pl/
-	\item http://php.net/
-	\item http://www.w3schools.com/html/default.asp
-	\item http://www.w3schools.com/sql/default.asp
-\end{enumerate}
+\bibliographystyle {IEEEtran}
+\bibliography {bibliografia} 
+\nocite {*}
+
 \end{document}

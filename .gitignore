@@ -4,6 +4,9 @@
 *.lof
 *.lot
 *.toc
+*.bbl
+*.bgl
+*.blg
 Dokumentacja/Założenia projektowe/założenia.synctex.gz
 Dokumentacja/Założenia projektowe/założenia.synctex.gz
 .project
