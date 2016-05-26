@@ -216,32 +216,52 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `sklepbd`.`sprzedaz`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `sklepbd`.`sprzedaz` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `idZaopatrzenia` INT UNSIGNED NOT NULL,
-  `idKlienta` INT UNSIGNED NOT NULL,
-  `idPracownika` INT UNSIGNED NOT NULL,
-  `dataSprzeazy` DATETIME NOT NULL,
+-- CREATE TABLE IF NOT EXISTS `sklepbd`.`sprzedaz` (
+--   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--   `idZaopatrzenia` INT UNSIGNED NOT NULL,
+--   `idKlienta` INT UNSIGNED NOT NULL,
+--   `idPracownika` INT UNSIGNED NOT NULL,
+--   `dataSprzeazy` DATETIME NOT NULL,
+--   PRIMARY KEY (`id`),
+--   INDEX `index2` (`idZaopatrzenia` ASC),
+--   INDEX `index3` (`idKlienta` ASC),
+--   INDEX `index4` (`idPracownika` ASC),
+--   CONSTRAINT `fk_sprzedaz_1`
+--     FOREIGN KEY (`idZaopatrzenia`)
+--     REFERENCES `sklepbd`.`zaopatrzenie` (`id`)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION,
+--   CONSTRAINT `fk_sprzedaz_2`
+--     FOREIGN KEY (`idKlienta`)
+--     REFERENCES `sklepbd`.`klienci` (`id`)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION,
+--   CONSTRAINT `fk_sprzedaz_3`
+--     FOREIGN KEY (`idPracownika`)
+--     REFERENCES `sklepbd`.`personel` (`id`)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION)
+-- ENGINE = InnoDB;
+
+CREATE TABLE `sprzedaz` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `idZamowienia` int(10) UNSIGNED NOT NULL,
+  `idPracownika` int(10) UNSIGNED NOT NULL,
+  `dataSprzedazy` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `index2` (`idZaopatrzenia` ASC),
-  INDEX `index3` (`idKlienta` ASC),
-  INDEX `index4` (`idPracownika` ASC),
+  INDEX `index2` (`idZamowienia`),
+  INDEX `index4` (`idPracownika`),
   CONSTRAINT `fk_sprzedaz_1`
-    FOREIGN KEY (`idZaopatrzenia`)
-    REFERENCES `sklepbd`.`zaopatrzenie` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sprzedaz_2`
-    FOREIGN KEY (`idKlienta`)
-    REFERENCES `sklepbd`.`klienci` (`id`)
+    FOREIGN KEY (`idZamowienia`)
+    REFERENCES `zamowienia` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_sprzedaz_3`
     FOREIGN KEY (`idPracownika`)
-    REFERENCES `sklepbd`.`personel` (`id`)
+    REFERENCES `personel` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB;
 
 
 -- -----------------------------------------------------
@@ -276,6 +296,54 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`platnosci` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `sklepbd`.`zamowienia`
+-- -----------------------------------------------------
+
+CREATE TABLE `zamowienia` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idKlienta` int(10) UNSIGNED NOT NULL,
+  `dataDodania` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idKlienta` (`idKlienta`),
+  CONSTRAINT `fk_zamowienia`
+    FOREIGN KEY (`idKlienta`)
+    REFERENCES `klienci` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB;
+
+-- -----------------------------------------------------
+-- Table `sklepbd`.`zamowienia_produkty`
+-- -----------------------------------------------------
+
+CREATE TABLE `zamowienia_produkty` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idZamowienia` int(11) UNSIGNED NOT NULL,
+  `idMagazynu` int(11) UNSIGNED NOT NULL,
+  `idProduktu` int(11) UNSIGNED NOT NULL,
+  `ilosc` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idZamowienia` (`idZamowienia`),
+  INDEX `idMagazynu` (`idMagazynu`),
+  INDEX `idProduktu` (`idProduktu`),
+  CONSTRAINT `fk_zamowienia_produkty_1`
+    FOREIGN KEY (`idZamowienia`)
+    REFERENCES `zamowienia` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_zamowienia_produkty_2`
+    FOREIGN KEY (`idMagazynu`)
+    REFERENCES `magazyny` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_zamowienia_produkty_3`
+    FOREIGN KEY (`idProduktu`)
+    REFERENCES `produkty` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
