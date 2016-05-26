@@ -1,5 +1,9 @@
 *.aux
 *.gz
+*.log
+*.lof
+*.lot
+*.toc
 Dokumentacja/Założenia projektowe/założenia.synctex.gz
 Dokumentacja/Założenia projektowe/założenia.synctex.gz
 .project
