@@ -2,6 +2,8 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+DROP DATABASE `sklepbd`;
+
 -- -----------------------------------------------------
 -- Schema sklepbd
 -- -----------------------------------------------------
@@ -375,6 +377,37 @@ CREATE VIEW `lista_towarow` AS
         zaopatrzenie zop
     ON
         zop.idProduktu = pdk.id;
+
+#####PROCEDURY
+
+DELIMITER //
+CREATE PROCEDURE dodajProduktDoZamowienia(
+    IN id_produktu INT UNSIGNED,
+  IN il INT UNSIGNED,
+  IN id_klienta INT UNSIGNED,
+  IN id_zamowienia INT UNSIGNED
+)
+BEGIN
+  DECLARE zid INT UNSIGNED DEFAULT 0;
+  DECLARE zil INT UNSIGNED DEFAULT 0;
+  DECLARE zidm INT UNSIGNED DEFAULT 0;
+  DECLARE zap CURSOR FOR SELECT id, idMagazynu, ilosc FROM zaopatrzenie WHERE idProduktu = id_produktu AND ilosc > 0;
+  OPEN zap;
+  WHILE il > 0 DO
+    FETCH zap INTO zid, zidm, zil;
+    IF zil <= il THEN
+      DELETE FROM zaopatrzenie WHERE id = zid;
+      INSERT INTO zamowienia_produkty (idZamowienia, idMagazynu, idProduktu, ilosc) VALUES (id_zamowienia, zidm, id_produktu, zil);
+      SET il = il - zil;
+    ELSE
+      UPDATE zaopatrzenie SET ilosc = (zil - il) WHERE id = zid;
+      INSERT INTO zamowienia_produkty (idZamowienia, idMagazynu, idProduktu, ilosc) VALUES (id_zamowienia, zidm, id_produktu, il);
+      SET il = 0;
+    END IF;
+  END WHILE;
+  CLOSE zap;
+END //
+DELIMITER ;
 
 #####DANE TESTOWE
 #konta logowania
