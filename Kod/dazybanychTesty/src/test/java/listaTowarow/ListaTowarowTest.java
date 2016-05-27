@@ -2,8 +2,8 @@ package listaTowarow;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import utils.DBConnector;
 import utils.SeleniumTest;
 
@@ -14,44 +14,46 @@ public class ListaTowarowTest extends SeleniumTest{
 
     private DBConnector db;
 
-    @Before
+    @BeforeClass
     public void init(){
         super.init();
         db = new DBConnector();
         getTo("/");
     }
 
-    @Test
+    @Test()
     public void shouldFindProducerNames(){
         //given
-        Map<String, String> expected = db.findProductsWithProducerId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findProducer(entry.getValue())));
+        Map<Integer, String> expected = db.findProductsWithProducerId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findProducer(entry.getValue())));
         
         //when
-        for(Map.Entry<String, String> entry : expected.entrySet()){
-        	Assertions.assertThat(findProducers(entry.getKey())).contains(entry.getValue());
+        for(Map.Entry<Integer, String> entry : expected.entrySet()){
+        	Assertions.assertThat(findProducer(entry.getKey())).isEqualTo(entry.getValue());
         }
     }
     
     @Test
     public void shouldFindCategoryNames(){
         //given
-        Map<String, String> expected = db.findProductsWithCategoryId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findCategory(entry.getValue())));
+        Map<Integer, String> expected = db.findProductsWithCategoryId().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findCategory(entry.getValue())));
         
         //when
-        for(Map.Entry<String, String> entry : expected.entrySet()){
-        	Assertions.assertThat(findCategories(entry.getKey())).contains(entry.getValue());
+        for(Map.Entry<Integer, String> entry : expected.entrySet()){
+        	Assertions.assertThat(findCategory(entry.getKey())).isEqualTo(entry.getValue());
         }
     }
     
     @Test
-    @Ignore
     public void shouldFindAmounts(){
         //given
-        Map<String, String> expected = db.findProductsWithAmount().entrySet().stream().collect(Collectors.toMap(entry -> entry.getKey(), entry -> db.findCategory(entry.getValue())));
+        Map<Integer, Integer> expected = db.findProductsWithAmount();
         
         //when
-        for(Map.Entry<String, String> entry : expected.entrySet()){
-        	Assertions.assertThat(findAmounts(entry.getKey())).contains(entry.getValue());
+        for(Map.Entry<Integer, Integer> entry : expected.entrySet()){
+            if(entry.getValue() == 0)
+                Assertions.assertThat(findAmount(entry.getKey())).isEqualTo("Brak towaru!");
+            else
+        	    Assertions.assertThat(findAmount(entry.getKey())).isEqualTo(entry.getValue().toString());
         }
     }
 

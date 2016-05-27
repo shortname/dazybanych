@@ -1,7 +1,6 @@
 package utils;
 
 import java.sql.*;
-import java.math.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ public class DBConnector {
 
     Driver mysql;
     Connection connection;
-    Statement statement;
+    Statement statementA, statementB;
 
     private final static String USER = "root";
     private final static String PASSWORD = "admin";
@@ -20,25 +19,26 @@ public class DBConnector {
             mysql = new com.mysql.jdbc.Driver();
             DriverManager.registerDriver(mysql);
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            statementA = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            statementB = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public Map<String, Integer> findProductsWithProducerId(){
+    public Map<Integer, Integer> findProductsWithProducerId(){
         ResultSet wares = null;
         try {
-            wares = execute("SELECT * FROM produkty;");
+            wares = executeA("SELECT * FROM produkty;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, Integer> result = new HashMap<>();
+        Map<Integer, Integer> result = new HashMap<>();
         try {
             while(wares.next()){
-                String name = wares.getString("nazwa");
+                Integer id = wares.getInt("id");
                 Integer producerId = wares.getInt("idProducenta");
-                result.put(name, producerId);
+                result.put(id, producerId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,27 +46,22 @@ public class DBConnector {
         return result;
     }
     
-    public Map<String, Integer> findProductsWithAmount(){
-        ResultSet wares = null, amounts = null;
-        try {
-            wares = execute("SELECT * FROM produkty;");
-            amounts = execute("SELECT * FROM zaopatrzenie;");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Map<String, Integer> result = new HashMap<>();
-        try {
+    public Map<Integer, Integer> findProductsWithAmount(){
+        Map<Integer, Integer> result = new HashMap<>();
+        try (
+                ResultSet wares = executeA("SELECT * FROM produkty;");
+                ResultSet amounts = executeB("SELECT * FROM zaopatrzenie;");
+        ){
             while(wares.next()){
-                String name = wares.getString("nazwa");
                 int id = wares.getInt("id");
                 int amount = 0;
-                amounts.first();
+                amounts.beforeFirst();
                 while(amounts.next()){
                 	if(amounts.getInt("idProduktu") == id){
                 		amount += amounts.getInt("ilosc");
                 	}
                 }
-                result.put(name, amount);
+                result.put(id, amount);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,19 +69,19 @@ public class DBConnector {
         return result;
     }
     
-    public Map<String, Integer> findProductsWithCategoryId(){
+    public Map<Integer, Integer> findProductsWithCategoryId(){
         ResultSet wares = null;
         try {
-            wares = execute("SELECT * FROM produkty;");
+            wares = executeA("SELECT * FROM produkty;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Map<String, Integer> result = new HashMap<>();
+        Map<Integer, Integer> result = new HashMap<>();
         try {
             while(wares.next()){
-                String name = wares.getString("nazwa");
+                Integer id = wares.getInt("id");
                 Integer categoryId = wares.getInt("idKategorii");
-                result.put(name, categoryId);
+                result.put(id, categoryId);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,7 +93,7 @@ public class DBConnector {
         ResultSet producers = null;
         String result = null;
         try {
-            producers = execute("SELECT * FROM producenci WHERE id="+id+";");
+            producers = executeA("SELECT * FROM producenci WHERE id="+id+";");
             producers.first();
             result = producers.getString("nazwaProducenta");
         } catch (SQLException e) {
@@ -111,7 +106,7 @@ public class DBConnector {
         ResultSet producers = null;
         String result = null;
         try {
-            producers = execute("SELECT * FROM kategorie WHERE id="+id+";");
+            producers = executeA("SELECT * FROM kategorie WHERE id="+id+";");
             producers.first();
             result = producers.getString("nazwaKategorii");
         } catch (SQLException e) {
@@ -120,8 +115,12 @@ public class DBConnector {
         return result;
     }
 
-    public ResultSet execute(String query) throws SQLException {
-        return statement.executeQuery(query);
+    public ResultSet executeA(String query) throws SQLException {
+        return statementA.executeQuery(query);
+    }
+
+    public ResultSet executeB(String query) throws SQLException {
+        return statementB.executeQuery(query);
     }
 
 }

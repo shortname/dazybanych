@@ -6,6 +6,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +20,7 @@ public class SeleniumTest {
     private WebDriver webDriver = new FirefoxDriver();
     private static final String BASE_URL = "http://localhost";
 
-    @Before
+    @BeforeClass
     public void init(){
         webDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
@@ -27,27 +29,25 @@ public class SeleniumTest {
     	webDriver.get(BASE_URL + path);
     }
 
-    protected List<String> findNames(){
-        return webDriver.findElements(By.id("nazwa")).stream().map(WebElement::getText).collect(Collectors.toList());
+    protected String findProducer(int id){
+        return webDriver.findElement(By.xpath("//tr[@id='" +id+ "']/td[@id='producent']")).getText();
+    }
+    
+    protected String findCategory(int id){
+        return webDriver.findElement(By.xpath("//tr[@id='" +id+ "']/td[@id='kategoria']")).getText();
+    }
+    
+    protected String findAmount(int id){
+        return webDriver.findElement(By.xpath("//tr[@id='" +id+ "']/td[@id='ilosc']")).getText();
     }
 
-    protected List<String> findProducers(String name){
-        return webDriver.findElements(By.xpath("//*[contains(span, '" +name+ "')]/../td[@id='producent']")).stream().map(we -> we.getText()).collect(Collectors.toList());
+    protected void typeOrderAmount(int id, int amount){
+        WebElement field = webDriver.findElement(By.xpath("//tr[@id='" +id+ "']//input[@id='order']"));
+        field.clear();
+        field.sendKeys("" + amount);
     }
     
-    protected List<String> findCategories(String name){
-        return webDriver.findElements(By.xpath("//*[contains(span, '" +name+ "')]/../td[@id='kategoria']")).stream().map(we -> we.getText()).collect(Collectors.toList());
-    }
-    
-    protected List<String> findAmounts(String name){
-        return webDriver.findElements(By.xpath("//*[contains(span, '" +name+ "')]/../td[@id='ilosc']")).stream().map(we -> we.getText()).collect(Collectors.toList());
-    }
-
-    protected List<String> findProducers(){
-        return webDriver.findElements(By.id("producent")).stream().map(WebElement::getText).collect(Collectors.toList());
-    }
-    
-    @After
+    @AfterClass
     public void finish(){
     	webDriver.close();
     }
