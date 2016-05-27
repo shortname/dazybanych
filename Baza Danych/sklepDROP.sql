@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`klienci` (
   `idAdres` INT UNSIGNED NOT NULL,
   `idKontakt` INT UNSIGNED NOT NULL,
   `nip` VARCHAR(45) NULL,
-  `dataDodania` DATETIME NOT NULL,
+  `dataDodania` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `index1` (`idKontoLogowania` ASC),
   INDEX `index2` (`idAdres` ASC),

@@ -1,7 +1,12 @@
 package utils;
 
+import org.junit.Test;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DBConnector {
@@ -21,6 +26,7 @@ public class DBConnector {
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             statementA = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             statementB = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            reset();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,6 +127,21 @@ public class DBConnector {
 
     public ResultSet executeB(String query) throws SQLException {
         return statementB.executeQuery(query);
+    }
+
+    public void reset(){
+        Path resetScript = Paths.get("").toAbsolutePath().getParent().getParent().resolve("Baza Danych/sklepDROP.sql");
+        System.out.println(resetScript.toUri());
+        List<String> queries = SimpleScriptSplitter.splitQueriesFromFile(resetScript);
+        for(String query : queries){
+            try {
+                System.err.println(query);
+                statementA.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
     }
 
 }
