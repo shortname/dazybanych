@@ -142,7 +142,7 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                     <input type="radio" name="payment" value="transfer"/> Przelew<br />
                 </div><br />
                 <div style="display: inline-block;">
-                    <input type="submit" value="Zamów" />
+                    <input type="submit" id="orderButton" value="Zamów" />
                 </div>
             </form>
         </div>

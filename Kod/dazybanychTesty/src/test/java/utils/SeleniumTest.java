@@ -46,6 +46,11 @@ public class SeleniumTest {
         field.clear();
         field.sendKeys("" + amount);
     }
+
+    protected void clickZamow(){
+        WebElement button = webDriver.findElement(By.id("orderButton"));
+        button.click();
+    }
     
     @AfterClass
     public void finish(){

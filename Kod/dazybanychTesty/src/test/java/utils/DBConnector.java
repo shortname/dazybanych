@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class DBConnector {
 
     private final static String USER = "root";
     private final static String PASSWORD = "admin";
-    private final static String DB_URL = "jdbc:mysql://localhost:3306/sklepbd";
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/sklepbd?characterEncoding=utf8";
 
     public DBConnector(){
         try {
@@ -115,6 +116,36 @@ public class DBConnector {
             producers = executeA("SELECT * FROM kategorie WHERE id="+id+";");
             producers.first();
             result = producers.getString("nazwaKategorii");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<Order> findOrders(){
+        List<Order> result = new ArrayList<>();
+        ResultSet orders = null;
+        try {
+            orders = executeA("SELECT * FROM zamowienia;");
+            while(orders.next()){
+                Order order = new Order(orders.getInt("id"), orders.getInt("idKlienta"), orders.getString("status"));
+                result.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<OrderDetails> findOrderDetails(int orderId){
+        List<OrderDetails> result = new ArrayList<>();
+        ResultSet orders = null;
+        try {
+            orders = executeA("SELECT * FROM zamowienia_produkty WHERE idZamowienia = " + orderId + ";");
+            while(orders.next()){
+                OrderDetails orderDetails = new OrderDetails(orders.getInt("idMagazynu"), orders.getInt("idProduktu"), orders.getInt("ilosc"));
+                result.add(orderDetails);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
