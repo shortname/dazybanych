@@ -218,33 +218,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `sklepbd`.`sprzedaz`
 -- -----------------------------------------------------
--- CREATE TABLE IF NOT EXISTS `sklepbd`.`sprzedaz` (
---   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
---   `idZaopatrzenia` INT UNSIGNED NOT NULL,
---   `idKlienta` INT UNSIGNED NOT NULL,
---   `idPracownika` INT UNSIGNED NOT NULL,
---   `dataSprzeazy` DATETIME NOT NULL,
---   PRIMARY KEY (`id`),
---   INDEX `index2` (`idZaopatrzenia` ASC),
---   INDEX `index3` (`idKlienta` ASC),
---   INDEX `index4` (`idPracownika` ASC),
---   CONSTRAINT `fk_sprzedaz_1`
---     FOREIGN KEY (`idZaopatrzenia`)
---     REFERENCES `sklepbd`.`zaopatrzenie` (`id`)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION,
---   CONSTRAINT `fk_sprzedaz_2`
---     FOREIGN KEY (`idKlienta`)
---     REFERENCES `sklepbd`.`klienci` (`id`)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION,
---   CONSTRAINT `fk_sprzedaz_3`
---     FOREIGN KEY (`idPracownika`)
---     REFERENCES `sklepbd`.`personel` (`id`)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION)
--- ENGINE = InnoDB;
-
 CREATE TABLE `sprzedaz` (
   `id` int(10) UNSIGNED NOT NULL,
   `idZamowienia` int(10) UNSIGNED NOT NULL,
@@ -382,7 +355,7 @@ CREATE VIEW `lista_towarow` AS
 
 DELIMITER //
 CREATE PROCEDURE dodajProduktDoZamowienia(
-    IN id_produktu INT UNSIGNED,
+  IN id_produktu INT UNSIGNED,
   IN il INT UNSIGNED,
   IN id_klienta INT UNSIGNED,
   IN id_zamowienia INT UNSIGNED
@@ -406,6 +379,16 @@ BEGIN
     END IF;
   END WHILE;
   CLOSE zap;
+END //
+
+CREATE FUNCTION otworzZamowienie(
+  id_klienta INT UNSIGNED
+)
+RETURNS INT UNSIGNED
+NOT DETERMINISTIC
+BEGIN
+  INSERT INTO zamowienia (idKlienta, status) VALUES (id_klienta, 'S');
+  RETURN LAST_INSERT_ID();
 END //
 DELIMITER ;
 

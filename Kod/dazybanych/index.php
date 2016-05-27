@@ -95,26 +95,12 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
         </head>
     <body>
         <div id="list" style="width:75%;">
-            <form method="POST" action="zamowienie.php">
+            <form method="GET" action="zamowienie.php">
                 <div  style="width:49%; display: inline-block;">
                     Klient:
                     <select name="client" style="width:100%;">
                         <?php
                             $wynik = mysql_query($clients);
-                            while($rekord = mysql_fetch_assoc($wynik)){
-                                $imie = $rekord['imie'];
-                                $nazwisko = $rekord['nazwisko'];
-                                $id = $rekord['id'];
-                                print "<option value='$id'>$imie $nazwisko</option>";
-                            }
-                        ?>
-                    </select>
-                </div>
-                <div style="width:49%; display: inline-block;">
-                    Sprzedawca:
-                    <select name="salesman" style="width:100%">
-                        <?php
-                            $wynik = mysql_query($salesmen);
                             while($rekord = mysql_fetch_assoc($wynik)){
                                 $imie = $rekord['imie'];
                                 $nazwisko = $rekord['nazwisko'];
@@ -141,7 +127,7 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                         $ilosc = $rekord['ilosc'];
                         $zamowienie = "";
                         if($ilosc != NULL)
-                            $zamowienie = "<input type='number' name='order_$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
+                            $zamowienie = "<input type='number' name='$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
                         print "<tr><td id='kategoria'>$kategoria</td><td><span id='nazwa'>$nazwa</span><br /><span style='font-size:10pt;'>$opis</span></td><td id='producent'>$producent</td><td>$cenaBrutto</td><td id='ilosc'>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
                     }
                     print "</tbody></table></body></html>";
