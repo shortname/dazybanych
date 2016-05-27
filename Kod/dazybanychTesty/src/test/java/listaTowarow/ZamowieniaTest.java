@@ -3,22 +3,28 @@ package listaTowarow;
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import utils.DBConnector;
-import utils.Order;
-import utils.OrderDetails;
-import utils.SeleniumTest;
+import utils.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ZamowieniaTest extends SeleniumTest {
 
     private DBConnector db;
+    private Map<Integer, Integer> firstOrder;
+    private Map<Integer, Integer> secondOrder;
 
     @BeforeClass
     public void init(){
         super.init();
         db = new DBConnector();
+        firstOrder = new HashMap<>();
+        firstOrder.put(12, 236);
+        firstOrder.put(13, 10);
+        firstOrder.put(2, 44);
+        firstOrder.put(4, 1);
+        secondOrder = new HashMap<>();
+        secondOrder.put(23, 6);
+        secondOrder.put(27, 100);
     }
 
     @Test
@@ -27,6 +33,7 @@ public class ZamowieniaTest extends SeleniumTest {
         List<Order> expectedOrders = createExpectedOrders();
         List<OrderDetails> expectedFirstOrderDetails = createExpectedFirstOrderDetails();
         List<OrderDetails> expectedSecondOrderDetails = createExpectedSecondOrderDetails();
+        List<StorageData> storageDataBefore = db.findStorageDataOfProducts(Arrays.asList(2, 4, 12, 13, 23, 27));
 
         //when
         createFirstOrder();
@@ -37,6 +44,12 @@ public class ZamowieniaTest extends SeleniumTest {
         Assertions.assertThat(actualOrders).containsOnlyElementsOf(expectedOrders);
         Assertions.assertThat(db.findOrderDetails(actualOrders.get(0).getId())).containsOnlyElementsOf(expectedFirstOrderDetails);
         Assertions.assertThat(db.findOrderDetails(actualOrders.get(1).getId())).containsOnlyElementsOf(expectedSecondOrderDetails);
+    }
+    
+    private void createOrder(List<OrderDetails> details){
+        getTo("/");
+        details.stream().forEach(detail -> typeOrderAmount(detail.getIdProduktu(), detail.getIlosc()));
+        clickZamow();
     }
 
     private void createFirstOrder(){

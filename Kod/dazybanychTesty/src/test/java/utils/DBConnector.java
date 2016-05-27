@@ -1,5 +1,6 @@
 package utils;
 
+import org.assertj.core.util.Strings;
 import org.junit.Test;
 
 import java.nio.file.Path;
@@ -145,6 +146,22 @@ public class DBConnector {
             while(orders.next()){
                 OrderDetails orderDetails = new OrderDetails(orders.getInt("idMagazynu"), orders.getInt("idProduktu"), orders.getInt("ilosc"));
                 result.add(orderDetails);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public List<StorageData> findStorageDataOfProducts(List<Integer> ids){
+        List<StorageData> result = new ArrayList<>();
+        String set = Strings.join(ids).with(",");
+        ResultSet records = null;
+        try {
+            records = executeA("SELECT * FROM zaopatrzenie WHERE FIND_IN_SET(idProduktu, '" + set + "') > 0;");
+            while(records.next()){
+                StorageData storageData = new StorageData(records.getInt("id"), records.getInt("idMagazynu"), records.getInt("idProduktu"), records.getInt("ilosc"));
+                result.add(storageData);
             }
         } catch (SQLException e) {
             e.printStackTrace();

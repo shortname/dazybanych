@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @EqualsAndHashCode
-public class OrderDetails {
+public class StorageData {
 
+    private int id;
     private int idMagazynu;
     private int idProduktu;
     private int ilosc;
