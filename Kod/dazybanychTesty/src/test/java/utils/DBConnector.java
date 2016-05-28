@@ -28,7 +28,6 @@ public class DBConnector {
             connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
             statementA = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             statementB = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            reset();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -153,10 +152,10 @@ public class DBConnector {
         return result;
     }
 
-    public List<StorageData> findStorageDataOfProducts(List<Integer> ids){
-        List<StorageData> result = new ArrayList<>();
-        String set = Strings.join(ids).with(",");
-        ResultSet records = null;
+    public StorageDataStore findStorageDataOfProducts(List<Integer> ids){
+            StorageDataStore  result = new StorageDataStore();
+            String set = Strings.join(ids).with(",");
+            ResultSet records = null;
         try {
             records = executeA("SELECT * FROM zaopatrzenie WHERE FIND_IN_SET(idProduktu, '" + set + "') > 0;");
             while(records.next()){

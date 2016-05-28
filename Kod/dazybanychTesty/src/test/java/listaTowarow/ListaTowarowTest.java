@@ -18,6 +18,7 @@ public class ListaTowarowTest extends SeleniumTest{
     public void init(){
         super.init();
         db = new DBConnector();
+        db.reset();
         getTo("/");
     }
 
