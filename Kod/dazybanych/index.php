@@ -1,23 +1,19 @@
 <?php
-$link = mysql_connect('localhost', 'root', 'admin');
+$link = mysqli_connect('localhost', 'root', 'admin', 'sklepbd');
 if(!$link){
     die("<h1>Connection error</h1>");
 }
-$db = mysql_select_db('sklepbd');
-if(!$db){
-    die("<h1>Database error</h1>");
-}
-mysql_set_charset("utf8");
+#mysqli_character_set_name("utf8");
 function wareList(){
-    $pros = '';
+    $pros = "";
     if(isset($_GET['producer'])){
         $pros = implode(",", $_GET['producer']);
     }
-    $cats = '';
+    $cats = "";
     if(isset($_GET['category'])){
         $cats = implode(",", $_GET['category']);
     }
-    return "CALL filtrujProdukty($pros, $cats);";
+    return "CALL filtrujProdukty('$pros', '$cats');";
 }
 $producers = "SELECT
     t.*
@@ -62,7 +58,6 @@ FROM
 WHERE
     t.ilosc != 0;";
 $clients = "SELECT id, imie, nazwisko FROM klienci ORDER BY nazwisko;";
-$salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
 ?>
 <html>
         <head>
@@ -71,14 +66,45 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
             <link rel="stylesheet" type="text/css" href="style/lista_towarow.css"/>
         </head>
     <body>
+        <div id='filter' style='width:20%; position: fixed; top:0px; right:0px;'>
+            <form method='GET' action='index.php'>
+                <h2>Producent</h2>
+                <?php
+                    $wynik = mysqli_query($link, $producers);
+                    while($rekord = mysqli_fetch_assoc($wynik)){
+                        $id = $rekord['id'];
+                        $name = $rekord['nazwaProducenta'];
+                        $index = "producer";
+                        $value = '';
+                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
+                            $value = 'checked=\'true\'';
+                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
+                    }
+                ?>
+                <h2>Kategoria</h2>
+                <?php
+                    $wynik = mysqli_query($link, $categories);
+                    while($rekord = mysqli_fetch_assoc($wynik)){
+                        $id = $rekord['id'];
+                        $name = $rekord['nazwaKategorii'];
+                        $index = "category";
+                        $value = '';
+                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
+                            $value = 'checked=\'true\'';
+                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
+                    }
+                ?>
+                <input type='submit' value="Filtruj" />
+            </form>
+        </div>
         <div id="list" style="width:75%;">
             <form method="GET" action="zamowienie.php">
                 <div  style="width:49%; display: inline-block;">
                     Klient:
                     <select name="client" style="width:100%;">
                         <?php
-                            $wynik = mysql_query($clients);
-                            while($rekord = mysql_fetch_assoc($wynik)){
+                            $wynik = mysqli_query($link, $clients);
+                            while($rekord = mysqli_fetch_assoc($wynik)){
                                 $imie = $rekord['imie'];
                                 $nazwisko = $rekord['nazwisko'];
                                 $id = $rekord['id'];
@@ -88,24 +114,26 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                     </select>
                 </div>
                 <?php
-                $wynik = mysql_query(wareList());
+                $wynik = mysqli_query($link, wareList());
                 print "<table class='border' style='width:100%;'>"
                     . "<thead>"
                             . "<tr><th>Kategoria</th><th>Nazwa</th><th>Producent</th><th>Cena brutto</th><th>Dostępne</th><th>Zamówienie</th></tr>"
                             . "</thead"
                             . "<tbody>";
-                    while($rekord = mysql_fetch_assoc($wynik)){
-                        $id = $rekord['idProduktu'];
-                        $nazwa = $rekord['nazwa'];
-                        $producent = $rekord['nazwaProducenta'];
-                        $kategoria = $rekord['nazwaKategorii'];
-                        $opis = $rekord['opis'];
-                        $cenaBrutto = $rekord['cenaBrutto'];
-                        $ilosc = $rekord['ilosc'];
-                        $zamowienie = "";
-                        if($ilosc != NULL)
-                            $zamowienie = "<input type='number' id='order' name='$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
-                        print "<tr id='$id'><td id='kategoria'>$kategoria</td><td><span id='nazwa'>$nazwa</span><br /><span style='font-size:10pt;'>$opis</span></td><td id='producent'>$producent</td><td>$cenaBrutto</td><td id='ilosc'>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
+                    if($wynik){
+                      while($rekord = mysqli_fetch_assoc($wynik)){
+                          $id = $rekord['idProduktu'];
+                          $nazwa = $rekord['nazwa'];
+                          $producent = $rekord['nazwaProducenta'];
+                          $kategoria = $rekord['nazwaKategorii'];
+                          $opis = $rekord['opis'];
+                          $cenaBrutto = $rekord['cenaBrutto'];
+                          $ilosc = $rekord['ilosc'];
+                          $zamowienie = "";
+                          if($ilosc != NULL)
+                              $zamowienie = "<input type='number' id='order' name='$id' min='0' max='".($ilosc==null ? 0 : $ilosc)."' value='0'>";
+                          print "<tr id='$id'><td id='kategoria'>$kategoria</td><td><span id='nazwa'>$nazwa</span><br /><span style='font-size:10pt;'>$opis</span></td><td id='producent'>$producent</td><td>$cenaBrutto</td><td id='ilosc'>".($ilosc==null ? "Brak towaru!" : $ilosc)."</td><td>$zamowienie</td></tr>";
+                      }
                     }
                     print "</tbody></table></body></html>";
                 ?>
@@ -121,37 +149,6 @@ $salesmen = "SELECT id, imie, nazwisko FROM personel ORDER BY nazwisko;";
                 <div style="display: inline-block;">
                     <input type="submit" id="orderButton" value="Zamów" />
                 </div>
-            </form>
-        </div>
-        <div id='filter' style='width:20%; position: fixed; top:0px; right:0px;'>
-            <form method='GET' action='index.php'>
-                <h2>Producent</h2>
-                <?php
-                    $wynik = mysql_query($producers);
-                    while($rekord = mysql_fetch_assoc($wynik)){
-                        $id = $rekord['id'];
-                        $name = $rekord['nazwaProducenta'];
-                        $index = "producer";
-                        $value = '';
-                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
-                            $value = 'checked=\'true\'';
-                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
-                    }
-                ?>
-                <h2>Kategoria</h2>
-                <?php
-                    $wynik = mysql_query($categories);
-                    while($rekord = mysql_fetch_assoc($wynik)){
-                        $id = $rekord['id'];
-                        $name = $rekord['nazwaKategorii'];
-                        $index = "category";
-                        $value = '';
-                        if(isset($_GET[$index]) && in_array($id, $_GET[$index]))
-                            $value = 'checked=\'true\'';
-                        print "<input type='checkbox' name='". $index ."[]' value='".$id."' ".$value."' />" . $name . "<br />";
-                    }
-                ?>
-                <input type='submit' value="Filtruj" />
             </form>
         </div>
     </body>

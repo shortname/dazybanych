@@ -398,11 +398,11 @@ CREATE PROCEDURE filtrujProdukty(
 BEGIN
   DECLARE filter VARCHAR(255) DEFAULT '';
   IF LENGTH(id_Producentow) > 0 AND LENGTH(id_Kategorii) > 0 THEN
-    SET filter = CONCAT('WHERE FIND_IN_SET(idProducenta,', id_Producentow, ') > 0 AND FIND_IN_SET(idKategorii,', id_Kategorii, ') > 0');
+    SET filter = CONCAT('WHERE FIND_IN_SET(idProducenta,\'', id_Producentow, '\') > 0 AND FIND_IN_SET(idKategorii,\'', id_Kategorii, '\') > 0');
   ELSEIF LENGTH(id_Producentow) > 0 THEN
-    SET filter = CONCAT('WHERE FIND_IN_SET(idProducenta,', id_Producentow, ') > 0');
+    SET filter = CONCAT('WHERE FIND_IN_SET(idProducenta,\'', id_Producentow, '\') > 0');
   ELSEIF LENGTH(id_Kategorii) > 0 THEN
-    SET filter = CONCAT('WHERE FIND_IN_SET(idKategorii,', id_Kategorii, ') > 0');
+    SET filter = CONCAT('WHERE FIND_IN_SET(idKategorii,\'', id_Kategorii, '\') > 0');
   END IF;
   SET @stmt = CONCAT('SELECT *, SUM(ilosc) ilosc FROM lista_towarow ', filter, ' GROUP BY idProduktu;');
   PREPARE stmt_exe FROM @stmt;
