@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.*;
-
 public class SimpleScriptSplitterTest {
 
     Path input = Paths.get("").resolve("src/test/resources/splitterTestFile.sql");
