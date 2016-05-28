@@ -9,38 +9,15 @@ if(!$db){
 }
 mysql_set_charset("utf8");
 function wareList(){
-    $filter = '';
+    $pros = '';
     if(isset($_GET['producer'])){
-        $producers = $_GET['producer'];
-        $filter .= "WHERE (";
-        foreach($producers as $key => $value){
-            if($key != 0)
-                $filter.="OR ";
-            $filter .= "idProducenta = $value ";
-        }
-        $filter .= ")";
+        $pros = implode(",", $_GET['producer']);
     }
+    $cats = '';
     if(isset($_GET['category'])){
-        $producers = $_GET['category'];
-        if(strlen($filter) == 0)
-            $filter .= 'WHERE (';
-        else
-            $filter .= "AND (";
-        foreach($producers as $key => $value){
-            if($key != 0)
-                $filter.="OR ";
-            $filter .= "idKategorii = $value ";
-        }
-        $filter .= ")";
+        $cats = implode(",", $_GET['category']);
     }
-    return "SELECT
-      *,
-      SUM(ilosc) ilosc
-    FROM
-        `lista_towarow`
-    ".$filter."
-    GROUP BY
-      idProduktu;";
+    return "CALL filtrujProdukty($pros, $cats);";
 }
 $producers = "SELECT
     t.*
