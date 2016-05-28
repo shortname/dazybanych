@@ -1,11 +1,15 @@
 package listaTowarow;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utils.DBConnector;
 import utils.SeleniumTest;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,6 +22,10 @@ public class ListaTowarowTest extends SeleniumTest{
         super.init();
         db = new DBConnector();
         db.reset();
+    }
+
+    @BeforeMethod
+    public void setUp(){
         getTo("/");
     }
 
@@ -57,6 +65,48 @@ public class ListaTowarowTest extends SeleniumTest{
         }
     }
 
+    @Test
+    public void shouldFilterProducers(){
+        List<Integer> producerIds = Arrays.asList(1, 3, 7);
+        List<Integer> expectedProducts = db.findRowsForProducers(producerIds);
+        producerIds.forEach(id -> checkProducer(id));
+        filter();
+        waitForFilter();
 
+        Assertions.assertThat(findShownRows()).containsOnlyElementsOf(expectedProducts);
+    }
+
+    @Test
+    public void shouldFilterCategories(){
+        List<Integer> categoryIds = Arrays.asList(1, 3);
+        List<Integer> expectedProducts = db.findRowsForCategories(categoryIds);
+        categoryIds.forEach(id -> checkCategory(id));
+        filter();
+        waitForFilter();
+
+        Assertions.assertThat(findShownRows()).containsOnlyElementsOf(expectedProducts);
+    }
+
+    @Test
+    public void shouldFilterCategoriesAndProducers(){
+        List<Integer> producerIds = Arrays.asList(1, 3, 7);
+        List<Integer> categoryIds = Arrays.asList(1, 3);
+        List<Integer> expectedProducts = db.findRowsForCategoriesAndProducers(categoryIds, producerIds);
+        producerIds.forEach(id -> checkProducer(id));
+        categoryIds.forEach(id -> checkCategory(id));
+        filter();
+        waitForFilter();
+
+        Assertions.assertThat(findShownRows()).containsOnlyElementsOf(expectedProducts);
+    }
+
+    @Test
+    public void shouldFilterEverything(){
+        List<Integer> expectedProducts = db.findAllRows();
+        filter();
+        waitForFilter();
+
+        Assertions.assertThat(findShownRows()).containsOnlyElementsOf(expectedProducts);
+    }
 
 }

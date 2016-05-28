@@ -5,10 +5,8 @@ import org.assertj.core.util.Strings;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiPredicate;
 
 public class DBConnector {
 
@@ -165,6 +163,81 @@ public class DBConnector {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public List<Integer> findRowsForCategories(List<Integer> categoryIds){
+        ResultSet wares = null;
+        try {
+            wares = executeA("SELECT idProduktu, idKategorii FROM lista_towarow;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Set<Integer> result = new HashSet<>();
+        try {
+            while(wares.next()){
+                if(categoryIds.contains(wares.getInt("idKategorii")))
+                    result.add(wares.getInt("idProduktu"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>(result);
+    }
+
+    public List<Integer> findRowsForProducers(List<Integer> producerIds){
+        ResultSet wares = null;
+        try {
+            wares = executeA("SELECT idProduktu, idProducenta FROM lista_towarow;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Set<Integer> result = new HashSet<>();
+        try {
+            while(wares.next()){
+                if(producerIds.contains(wares.getInt("idProducenta")))
+                    result.add(wares.getInt("idProduktu"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>(result);
+    }
+
+    public List<Integer> findRowsForCategoriesAndProducers(List<Integer> categoryIds, List<Integer> producerIds){
+        ResultSet wares = null;
+        try {
+            wares = executeA("SELECT idProduktu, idProducenta, idKategorii FROM lista_towarow;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Set<Integer> result = new HashSet<>();
+        try {
+            while(wares.next()){
+                if(categoryIds.contains(wares.getInt("idKategorii")) && producerIds.contains(wares.getInt("idProducenta")))
+                    result.add(wares.getInt("idProduktu"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>(result);
+    }
+
+    public List<Integer> findAllRows(){
+        ResultSet wares = null;
+        try {
+            wares = executeA("SELECT idProduktu FROM lista_towarow;");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Set<Integer> result = new HashSet<>();
+        try {
+            while(wares.next()){
+                result.add(wares.getInt("idProduktu"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>(result);
     }
 
     public ResultSet executeA(String query) throws SQLException {
