@@ -3,7 +3,7 @@ $link = mysqli_connect('localhost', 'root', 'admin', 'sklepbd');
 if(!$link){
     die("<h1>Connection error</h1>");
 }
-#mysqli_character_set_name("utf8");
+mysqli_set_charset($link, "utf8");
 function wareList(){
     $pros = "";
     if(isset($_GET['producer'])){
