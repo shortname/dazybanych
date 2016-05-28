@@ -2,7 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP DATABASE `sklepbd`;
+DROP DATABASE IF EXISTS `sklepbd`;
 
 -- -----------------------------------------------------
 -- Schema sklepbd
@@ -389,6 +389,14 @@ NOT DETERMINISTIC
 BEGIN
   INSERT INTO zamowienia (idKlienta, status) VALUES (id_klienta, 'S');
   RETURN LAST_INSERT_ID();
+END //
+
+CREATE PROCEDURE filtrujProdukty(
+  id_Producentow VARCHAR(255),
+  id_Kategorii VARCHAR(255)
+)
+BEGIN
+  SELECT *, SUM(ilosc) ilosc FROM lista_towarow WHERE FIND_IN_SET(idProducenta, id_Producentow) > 0 AND FIND_IN_SET(idKategorii, id_Kategorii) > 0 GROUP BY idProduktu;
 END //
 DELIMITER ;
 
