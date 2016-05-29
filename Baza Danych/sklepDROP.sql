@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `sklepbd`.`personel` (
   `idAdres` INT UNSIGNED NOT NULL,
   `idKontakt` INT UNSIGNED NOT NULL,
   `idMagazyn` INT UNSIGNED NOT NULL,
-  `kierownik` INT(1) NOT NULL,
+  `kierownik` TINYINT(1) NOT NULL,
   `dataZmiany` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `index2` (`idKontoLogowania` ASC),
@@ -279,7 +279,7 @@ CREATE TABLE `zamowienia` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idKlienta` int(10) UNSIGNED NOT NULL,
   `dataDodania` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` varchar(1) NOT NULL,
+  `status` ENUM('przyjete','oczekiwanie_platnosc','w_trakcie_realizacji', 'wyslane') NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `idKlienta` (`idKlienta`),
   CONSTRAINT `fk_zamowienia`
@@ -319,6 +319,197 @@ CREATE TABLE `zamowienia_produkty` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
 ) ENGINE=InnoDB;
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`adresy_BEFORE_INSERT` BEFORE INSERT ON `adresy` FOR EACH ROW
+BEGIN
+IF NEW.miasto NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki, ? - 0 lub 1 znak spacji
+  SIGNAL SQLSTATE '10000'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `miasto` jest niepoprawna!';
+END IF;
+
+IF NEW.wojewodztwo NOT REGEXP '^[[:alpha:]]{2,}[[.hyphen.]]?[[:alpha:]]{2,}$' THEN #przynajmniej cztery znaki, ? - 0 lub 1 znak minus
+  SIGNAL SQLSTATE '10001'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `wojewodztwo` jest niepoprawna!';
+END IF;
+
+IF NEW.kodPocztowy NOT REGEXP '^[0-9]{2}[[.hyphen.]][0-9]{3}$' THEN #dwie cyfry, znak minus, trzy cyfry
+  SIGNAL SQLSTATE '10002'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `kodPocztowy` jest niepoprawna!';
+END IF;
+
+IF NEW.ulica NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki znaki, ? - 0 lub 1 znak spacji
+  SIGNAL SQLSTATE '10003'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `ulica` jest niepoprawna!';
+END IF;
+
+IF NEW.nrDomu NOT REGEXP '^[0-9]{1,10}[[:alpha:]]?$' THEN #co najmniej dwie cyfry
+  SIGNAL SQLSTATE '10004'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrDomu` jest niepoprawna!';
+END IF;
+
+IF NEW.nrLokalu NOT REGEXP '^[0-9]{1,10}$' THEN #co najmniej dwie cyfry
+  SIGNAL SQLSTATE '10005'
+     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrLokalu` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`kategorie_BEFORE_INSERT` BEFORE INSERT ON `kategorie` FOR EACH ROW
+BEGIN
+IF NEW.nazwaKategorii NOT REGEXP '^[[:alnum:]]{2,}$' THEN #przynajmniej 2 znaki i/lub cyfry
+  SIGNAL SQLSTATE '10006'
+     SET MESSAGE_TEXT = '[tabla:kategorie] - kolumna `nazwaKategorii` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`klienci_BEFORE_INSERT` BEFORE INSERT ON `klienci` FOR EACH ROW
+BEGIN
+IF NEW.Imie NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+  SIGNAL SQLSTATE '10007'
+     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Imie` jest niepoprawna!';
+END IF;
+
+IF NEW.Nazwisko NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+  SIGNAL SQLSTATE '10008'
+     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Nazwisko` jest niepoprawna!';
+END IF;
+
+IF NEW.nip NOT REGEXP '^[[:digit:]]{10}|[[:digit:]]{3}[[.hyphen.]][[:digit:]]{3}[[.hyphen.]][[:digit:]]{2}[[.hyphen.]][[:digit:]]{2}$' THEN #10 cyfr lub 3-3-2-2
+  SIGNAL SQLSTATE '10008'
+     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `nip` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+DROP TRIGGER IF EXISTS sklepbd.kontakty_BINS$$
+USE `sklepbd`$$
+CREATE TRIGGER `kontakty_BINS` BEFORE INSERT ON `kontakty`
+FOR EACH ROW
+BEGIN
+IF NEW.telefon1 NOT REGEXP '^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}$' THEN 
+  SIGNAL SQLSTATE '10009'
+     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon1` jest niepoprawna!';
+END IF;
+
+IF NEW.telefon2 NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN 
+  SIGNAL SQLSTATE '10010'
+     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon2` jest niepoprawna!';
+END IF;
+
+IF NEW.fax NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN 
+  SIGNAL SQLSTATE '10011'
+     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `fax` jest niepoprawna!';
+END IF;
+
+IF NEW.email NOT LIKE '%_@%_.__%' THEN
+  SIGNAL SQLSTATE VALUE '10012'
+    SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `email` jest niepoprawna!';
+END IF;
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`kontaLogowania_BEFORE_INSERT` BEFORE INSERT ON `kontaLogowania` FOR EACH ROW
+BEGIN
+IF NEW.login NOT REGEXP '^[[:alnum:]]{3,}$' THEN #przynajmniej 3 znaki znaki i/lub cyfry
+  SIGNAL SQLSTATE '10013'
+     SET MESSAGE_TEXT = '[tabla:kontaLogowania] - kolumna `login` jest niepoprawna!';
+END IF;
+
+IF NEW.sha256Haslo NOT REGEXP '^[0-9a-f]{32}$' THEN #przynajmniej 3 znaki znaki i/lub cyfry
+  SIGNAL SQLSTATE '10014'
+     SET MESSAGE_TEXT = '[tabla:kontaLogowania] - kolumna `sha256Haslo` jest niepoprawna!';
+END IF;
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`personel_BEFORE_INSERT` BEFORE INSERT ON `personel` FOR EACH ROW
+BEGIN
+IF NEW.Imie NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+  SIGNAL SQLSTATE '10015'
+     SET MESSAGE_TEXT = '[tabla:personel] - kolumna `Imie` jest niepoprawna!';
+END IF;
+
+IF NEW.Nazwisko NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+  SIGNAL SQLSTATE '10016'
+     SET MESSAGE_TEXT = '[tabla:personel] - kolumna `Nazwisko` jest niepoprawna!';
+END IF;
+
+IF NEW.kierownik NOT REGEXP '^[0-1]$' THEN #0-1
+  SIGNAL SQLSTATE '10017'
+     SET MESSAGE_TEXT = '[tabla:personel] - kolumna `kierownik` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`producenci_BEFORE_INSERT` BEFORE INSERT ON `producenci` FOR EACH ROW
+BEGIN
+IF NEW.nazwaProducenta NOT REGEXP '^([[:alnum:]]{2,}[[:space:]]?){1,}$' THEN #przynajmniej 2 znaki i/lub cyfry, ? - 0 lub 1 znak spacji <- przynajmniej raz
+  SIGNAL SQLSTATE '10018'
+     SET MESSAGE_TEXT = '[tabla:producenci] - kolumna `nazwaProducenta` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`produkty_BEFORE_INSERT` BEFORE INSERT ON `produkty` FOR EACH ROW
+BEGIN
+IF NEW.nazwa NOT REGEXP '^([[:alnum:]]{2,}[[:space:]]?){1,}$' THEN #przynajmniej 2 znaki i/lub cyfry, ? - 0 lub 1 znak spacji <- przynajmniej raz
+  SIGNAL SQLSTATE '10019'
+     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `nazwa` jest niepoprawna!';
+END IF;
+
+IF NEW.opis NOT REGEXP '^([[:alnum:]]+[[.comma.]]?[[.period.]]?[[.colon.]]?[[.semicolon.]]?[[.hyphen.]]?[[:space:]]?){1,}[[.period.]]?$' THEN #przynajmniej 1 znak, ? - 0 lub 1 znak [spacji , . : ; - ] <- przynajmniej raz
+  SIGNAL SQLSTATE '10020'
+     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `opis` jest niepoprawna!';
+END IF;
+
+IF NEW.cenaNetto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
+  SIGNAL SQLSTATE '10021'
+     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaNetto` jest niepoprawna!';
+END IF;
+
+IF NEW.cenaBrutto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
+  SIGNAL SQLSTATE '10021'
+     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaBrutto` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`zamowienia_produkty_BEFORE_INSERT` BEFORE INSERT ON `zamowienia_produkty` FOR EACH ROW
+BEGIN
+IF NEW.ilosc <= 0 or NEW.ilosc > 1e6 THEN #zakres od 0-1000000
+  SIGNAL SQLSTATE '10022'
+     SET MESSAGE_TEXT = '[tabla:zamowienia_produkty] - kolumna `ilosc` jest niepoprawna!';
+END IF;
+
+END$$
+
+DELIMITER $$
+
+CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`zaopatrzenie_BEFORE_INSERT` BEFORE INSERT ON `zaopatrzenie` FOR EACH ROW
+BEGIN
+IF NEW.ilosc <= 0 or NEW.ilosc > 1e6 THEN #zakres od 0-1000000
+  SIGNAL SQLSTATE '10023'
+     SET MESSAGE_TEXT = '[tabla:zaopatrzenie] - kolumna `ilosc` jest niepoprawna!';
+END IF;
+
+END$$
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -421,22 +612,25 @@ INSERT INTO `kontaLogowania` (`id`, `login`, `sha256Haslo`) VALUES
 
 #adresy
 INSERT INTO `adresy`(`id`, `miasto`, `wojewodztwo`, `kodPocztowy`, `ulica`, `nrDomu`, `nrLokalu`) VALUES
-(1, 'Wałbrzych', 'dolnośląskie', '90-901', 'al. Szkolna', '2', NULL),
-(2, 'Kielce', 'świętokrzyskie', '09-999', 'pl. Jednokierunkowa', '11', '4'),
-(3, 'Zielona Góra', 'lubuskie', '19-999', 'ul. Magazynowa', '6a', '2'),
-(4, 'Zielona Góra', 'lubuskie', '19-000', 'ul. Magazynowa', '182', '2'),
-(5, 'Zielona Góra', 'lubuskie', '19-000', 'ul. Portowa', '12', '2'),
-(6, 'Białystok', 'podlaskie', '33-908', 'ul. Powstańców warszawskich', '1', NULL);
+(1, 'Wałbrzych', 'dolnośląskie', '90-901', 'Szkolna', '2', NULL),
+(2, 'Kielce', 'świętokrzyskie', '09-999', 'Jednokierunkowa', '11', '4'),
+(3, 'Zielona Góra', 'lubuskie', '19-999', 'Magazynowa', '6a', '2'),
+(4, 'Zielona Góra', 'lubuskie', '19-000', 'Magazynowa', '182', '2'),
+(5, 'Zielona Góra', 'lubuskie', '19-000', 'Portowa', '12', '2'),
+(6, 'Toruń', 'kujawsko-pomorskie', '60-000', 'Portowa', '12', '2'),
+(7, 'Białystok', 'podlaskie', '33-908', 'Powstańców warszawskich', '1', NULL);
 
 #kontakty
 INSERT INTO `kontakty`(`id`, `telefon1`, `telefon2`, `email`) VALUES
-(1, '38294038290', '7328432789', 'klient@k.p'),
-(2, '849305438950', '7328432789', 'personnel@p.p'),
-(3, '3829403843290', NULL, 'kierownik@k.p');
+(1, '38294038290', '7328432789', 'klient@op.pl'),
+(2, '849305438950', '7328432789', 'personnel@op.pl'),
+(3, '3829403843290', NULL, 'kierownik@op.pl');
 
 #klienci
 INSERT INTO `klienci`(`id`, `Imie`, `Nazwisko`, `idKontoLogowania`, `idAdres`, `idKontakt`, `nip`) VALUES
-(1, 'Jan', 'Wąski', 2, 1, 1, '789789798789789');
+(1, 'Jan', 'Wąski', 2, 1, 1, '871-856-25-23'),
+(2, 'Jan', 'Kowalski', 3, 2, 2, '852-852-22-55'),
+(3, 'Piotr', 'Koza', 4, 3, 3, '254-526-33-21');
 
 #magazyny
 INSERT INTO `magazyny`(`id`, `idAdres`) VALUES
@@ -458,7 +652,7 @@ INSERT INTO `producenci`(`id`, `nazwaProducenta`) VALUES
 (5, 'MKPZ WISŁA'),
 (6, 'DIO'),
 (7, 'DEM BA DUR'),
-(8, 'E104B'),
+(8, 'EB23'),
 (9, 'EIGENWERT'),
 (10, 'AEROPLANT'),
 (11, 'WINDPOL'),
@@ -479,18 +673,18 @@ INSERT INTO `produkty`(`id`, `nazwa`, `idProducenta`, `idKategorii`, `opis`, `ce
 (3, 'piłka niebieska', 2, 1, 'piłka, niebieska, okrągła, do footbolu', 105.90, 180.4),
 (4, 'rakieta', 3, 2, 'czarna, z grafenu', 72.0, 102.86),
 (5, 'siatka', 3, 2, '100m, nylonowa, biała', 7.20, 12.86),
-(6, 'korki', 1, 1, 'czerwone, rozmiary: 30-50', 2.15, 3.15),
+(6, 'korki', 1, 1, 'czerwone, rozmiary: 30-30', 2.15, 3.15),
 (7, 'lina', 5, 5, '25 m', 120.80, 121.70),
 (8, 'lina', 6, 5, '25m', 105.90, 180.4),
 (9, 'rakieta', 1, 2, 'czarna, z plastyku', 1.0, 2.86),
-(10, 'kąpielówki męskie', 6, 3, '', 1.9, 2.96),
-(11, 'kąpielówki chłopięce', 6, 3, '', 0.10, 0.90),
+(10, 'kąpielówki męskie', 6, 3, 'yu', 1.9, 2.96),
+(11, 'kąpielówki chłopięce', 6, 3, 'uu', 0.10, 0.90),
 (12, 'strój kąpielowy', 6, 3, 'jednoczęściowy', 0.80, 1.70),
 (13, 'strój kąpielowy', 6, 3, 'dwuczęściowy', 105.90, 180.4),
 (14, 'zbierak', 3, 2, 'czarna, z grafenu', 21.0, 23.86),
 (15, 'piłki do tenisa', 9, 2, 'żółte, 18 szt.', 6.5, 22.5),
 (16, 'piłki do tenisa', 12, 2, 'zielone, 26 szt.', 8.0, 18.0),
-(17, 'skarpety', 4, 1, 'wełniane, rozmiary: 15-50', 20.0, 21.70),
+(17, 'skarpety', 4, 1, 'wełniane, rozmiary: 15-20', 20.0, 21.70),
 (18, 'gwizdek', 7, 1, '300 dB', 105.90, 180.4),
 (19, 'rakieta', 3, 2, 'czarna, z grafenu', 72.0, 102.86),
 (20, 'siatka', 3, 2, '100m, nylonowa, biała', 7.20, 12.86),
@@ -500,10 +694,10 @@ INSERT INTO `produkty`(`id`, `nazwa`, `idProducenta`, `idKategorii`, `opis`, `ce
 (24, 'rękawice', 10, 1, 'białe, czarne', 20, 20.86),
 (25, 'rękawice', 10, 1, 'żółte', 21, 21.86),
 (26, 'kask', 5, 5, 'zielony, czerwony, żółty', 0.10, 0.90),
-(27, 'czepek', 11, 3, '', 10, 15),
-(28, 'czepek', 12, 3, '', 11.90, 12.4),
+(27, 'czepek', 11, 3, 'r', 10, 15),
+(28, 'czepek', 12, 3, 't', 11.90, 12.4),
 (29, 'piłki do baseballa', 9, 4, 'białe, 2 szt.', 62.0, 62.86),
-(30, 'buty do tenisa', 9, 2, 'rozmiary: 12-17', 72.20, 122.86);
+(30, 'buty do tenisa', 9, 2, 'rozmiary: 12-80', 72.20, 122.86);
 
 #zaopatrzenie
 INSERT INTO `zaopatrzenie`(`id`, `idProduktu`, `idMagazynu`, `ilosc`) VALUES
