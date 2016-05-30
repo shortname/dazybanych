@@ -255,6 +255,7 @@ public class DBConnector {
         for(String query : queries){
             try {
                 System.err.println(query);
+                System.err.println("#");
                 statementA.executeUpdate(query);
             } catch (SQLException e) {
                 e.printStackTrace();

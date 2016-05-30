@@ -320,7 +320,7 @@ CREATE TABLE `zamowienia_produkty` (
     ON UPDATE NO ACTION
 ) ENGINE=InnoDB;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`adresy_BEFORE_INSERT` BEFORE INSERT ON `adresy` FOR EACH ROW
 BEGIN
@@ -354,9 +354,9 @@ IF NEW.nrLokalu NOT REGEXP '^[0-9]{1,10}$' THEN #co najmniej dwie cyfry
      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrLokalu` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`kategorie_BEFORE_INSERT` BEFORE INSERT ON `kategorie` FOR EACH ROW
 BEGIN
@@ -365,9 +365,9 @@ IF NEW.nazwaKategorii NOT REGEXP '^[[:alnum:]]{2,}$' THEN #przynajmniej 2 znaki 
      SET MESSAGE_TEXT = '[tabla:kategorie] - kolumna `nazwaKategorii` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`klienci_BEFORE_INSERT` BEFORE INSERT ON `klienci` FOR EACH ROW
 BEGIN
@@ -386,26 +386,26 @@ IF NEW.nip NOT REGEXP '^[[:digit:]]{10}|[[:digit:]]{3}[[.hyphen.]][[:digit:]]{3}
      SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `nip` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
-DROP TRIGGER IF EXISTS sklepbd.kontakty_BINS$$
-USE `sklepbd`$$
+DROP TRIGGER IF EXISTS sklepbd.kontakty_BINS//
+USE `sklepbd`//
 CREATE TRIGGER `kontakty_BINS` BEFORE INSERT ON `kontakty`
 FOR EACH ROW
 BEGIN
-IF NEW.telefon1 NOT REGEXP '^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}$' THEN 
+IF NEW.telefon1 NOT REGEXP '^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}$' THEN
   SIGNAL SQLSTATE '10009'
      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon1` jest niepoprawna!';
 END IF;
 
-IF NEW.telefon2 NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN 
+IF NEW.telefon2 NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
   SIGNAL SQLSTATE '10010'
      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon2` jest niepoprawna!';
 END IF;
 
-IF NEW.fax NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN 
+IF NEW.fax NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
   SIGNAL SQLSTATE '10011'
      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `fax` jest niepoprawna!';
 END IF;
@@ -414,9 +414,9 @@ IF NEW.email NOT LIKE '%_@%_.__%' THEN
   SIGNAL SQLSTATE VALUE '10012'
     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `email` jest niepoprawna!';
 END IF;
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`kontaLogowania_BEFORE_INSERT` BEFORE INSERT ON `kontaLogowania` FOR EACH ROW
 BEGIN
@@ -429,9 +429,9 @@ IF NEW.sha256Haslo NOT REGEXP '^[0-9a-f]{32}$' THEN #przynajmniej 3 znaki znaki 
   SIGNAL SQLSTATE '10014'
      SET MESSAGE_TEXT = '[tabla:kontaLogowania] - kolumna `sha256Haslo` jest niepoprawna!';
 END IF;
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`personel_BEFORE_INSERT` BEFORE INSERT ON `personel` FOR EACH ROW
 BEGIN
@@ -450,9 +450,9 @@ IF NEW.kierownik NOT REGEXP '^[0-1]$' THEN #0-1
      SET MESSAGE_TEXT = '[tabla:personel] - kolumna `kierownik` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`producenci_BEFORE_INSERT` BEFORE INSERT ON `producenci` FOR EACH ROW
 BEGIN
@@ -461,9 +461,9 @@ IF NEW.nazwaProducenta NOT REGEXP '^([[:alnum:]]{2,}[[:space:]]?){1,}$' THEN #pr
      SET MESSAGE_TEXT = '[tabla:producenci] - kolumna `nazwaProducenta` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`produkty_BEFORE_INSERT` BEFORE INSERT ON `produkty` FOR EACH ROW
 BEGIN
@@ -487,9 +487,9 @@ IF NEW.cenaBrutto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
      SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaBrutto` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`zamowienia_produkty_BEFORE_INSERT` BEFORE INSERT ON `zamowienia_produkty` FOR EACH ROW
 BEGIN
@@ -498,9 +498,9 @@ IF NEW.ilosc <= 0 or NEW.ilosc > 1e6 THEN #zakres od 0-1000000
      SET MESSAGE_TEXT = '[tabla:zamowienia_produkty] - kolumna `ilosc` jest niepoprawna!';
 END IF;
 
-END$$
+END//
 
-DELIMITER $$
+DELIMITER //
 
 CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`zaopatrzenie_BEFORE_INSERT` BEFORE INSERT ON `zaopatrzenie` FOR EACH ROW
 BEGIN
@@ -509,7 +509,9 @@ IF NEW.ilosc <= 0 or NEW.ilosc > 1e6 THEN #zakres od 0-1000000
      SET MESSAGE_TEXT = '[tabla:zaopatrzenie] - kolumna `ilosc` jest niepoprawna!';
 END IF;
 
-END$$
+END//
+
+DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

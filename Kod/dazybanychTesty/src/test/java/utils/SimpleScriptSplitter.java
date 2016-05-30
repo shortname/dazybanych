@@ -27,7 +27,7 @@ public class SimpleScriptSplitter {
                     //queries.add(line);
                 }else{
                     if(line.endsWith(delimiter)){
-                        queries.add(query + line.replaceAll("\\s*" + delimiter, ""));
+                        queries.add(query + line.replaceAll(delimiter, ""));
                         query = "";
                     }else{
                         query += line + "\n";
