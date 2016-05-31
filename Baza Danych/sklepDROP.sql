@@ -322,39 +322,39 @@ CREATE TABLE `zamowienia_produkty` (
 
 DELIMITER //
 
-CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`adresy_BEFORE_INSERT` BEFORE INSERT ON `adresy` FOR EACH ROW
-BEGIN
-IF NEW.miasto NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki, ? - 0 lub 1 znak spacji
-  SIGNAL SQLSTATE '10000'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `miasto` jest niepoprawna!';
-END IF;
-
-IF NEW.wojewodztwo NOT REGEXP '^[[:alpha:]]{2,}[[.hyphen.]]?[[:alpha:]]{2,}$' THEN #przynajmniej cztery znaki, ? - 0 lub 1 znak minus
-  SIGNAL SQLSTATE '10001'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `wojewodztwo` jest niepoprawna!';
-END IF;
-
-IF NEW.kodPocztowy NOT REGEXP '^[0-9]{2}[[.hyphen.]][0-9]{3}$' THEN #dwie cyfry, znak minus, trzy cyfry
-  SIGNAL SQLSTATE '10002'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `kodPocztowy` jest niepoprawna!';
-END IF;
-
-IF NEW.ulica NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki znaki, ? - 0 lub 1 znak spacji
-  SIGNAL SQLSTATE '10003'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `ulica` jest niepoprawna!';
-END IF;
-
-IF NEW.nrDomu NOT REGEXP '^[0-9]{1,10}[[:alpha:]]?$' THEN #co najmniej dwie cyfry
-  SIGNAL SQLSTATE '10004'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrDomu` jest niepoprawna!';
-END IF;
-
-IF NEW.nrLokalu NOT REGEXP '^[0-9]{1,10}$' THEN #co najmniej dwie cyfry
-  SIGNAL SQLSTATE '10005'
-     SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrLokalu` jest niepoprawna!';
-END IF;
-
-END//
+-- CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`adresy_BEFORE_INSERT` BEFORE INSERT ON `adresy` FOR EACH ROW
+-- BEGIN
+-- IF NEW.miasto NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki, ? - 0 lub 1 znak spacji
+--   SIGNAL SQLSTATE '10000'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `miasto` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.wojewodztwo NOT REGEXP '^[[:alpha:]]{2,}[[.hyphen.]]?[[:alpha:]]{2,}$' THEN #przynajmniej cztery znaki, ? - 0 lub 1 znak minus
+--   SIGNAL SQLSTATE '10001'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `wojewodztwo` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.kodPocztowy NOT REGEXP '^[0-9]{2}[[.hyphen.]][0-9]{3}$' THEN #dwie cyfry, znak minus, trzy cyfry
+--   SIGNAL SQLSTATE '10002'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `kodPocztowy` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.ulica NOT REGEXP '^[[:alpha:]]{2,}[[:space:]]?[[:alpha:]]{2,}$' THEN #przynajmniej 4 znaki znaki, ? - 0 lub 1 znak spacji
+--   SIGNAL SQLSTATE '10003'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `ulica` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.nrDomu NOT REGEXP '^[0-9]{1,10}[[:alpha:]]?$' THEN #co najmniej dwie cyfry
+--   SIGNAL SQLSTATE '10004'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrDomu` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.nrLokalu NOT REGEXP '^[0-9]{1,10}$' THEN #co najmniej dwie cyfry
+--   SIGNAL SQLSTATE '10005'
+--      SET MESSAGE_TEXT = '[tabla:adresy] - kolumna `nrLokalu` jest niepoprawna!';
+-- END IF;
+--
+-- END//
 
 DELIMITER //
 
@@ -369,52 +369,52 @@ END//
 
 DELIMITER //
 
-CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`klienci_BEFORE_INSERT` BEFORE INSERT ON `klienci` FOR EACH ROW
-BEGIN
-IF NEW.Imie NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
-  SIGNAL SQLSTATE '10007'
-     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Imie` jest niepoprawna!';
-END IF;
-
-IF NEW.Nazwisko NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
-  SIGNAL SQLSTATE '10008'
-     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Nazwisko` jest niepoprawna!';
-END IF;
-
-IF NEW.nip NOT REGEXP '^[[:digit:]]{10}|[[:digit:]]{3}[[.hyphen.]][[:digit:]]{3}[[.hyphen.]][[:digit:]]{2}[[.hyphen.]][[:digit:]]{2}$' THEN #10 cyfr lub 3-3-2-2
-  SIGNAL SQLSTATE '10008'
-     SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `nip` jest niepoprawna!';
-END IF;
-
-END//
+-- CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`klienci_BEFORE_INSERT` BEFORE INSERT ON `klienci` FOR EACH ROW
+-- BEGIN
+-- IF NEW.Imie NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+--   SIGNAL SQLSTATE '10007'
+--      SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Imie` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.Nazwisko NOT REGEXP '^[[:alpha:]]{3,}$' THEN #przynajmniej 3 znaki znaki
+--   SIGNAL SQLSTATE '10008'
+--      SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `Nazwisko` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.nip NOT REGEXP '^[[:digit:]]{10}|[[:digit:]]{3}[[.hyphen.]][[:digit:]]{3}[[.hyphen.]][[:digit:]]{2}[[.hyphen.]][[:digit:]]{2}$' THEN #10 cyfr lub 3-3-2-2
+--   SIGNAL SQLSTATE '10008'
+--      SET MESSAGE_TEXT = '[tabla:klienci] - kolumna `nip` jest niepoprawna!';
+-- END IF;
+--
+-- END//
 
 DELIMITER //
 
-DROP TRIGGER IF EXISTS sklepbd.kontakty_BINS//
-USE `sklepbd`//
-CREATE TRIGGER `kontakty_BINS` BEFORE INSERT ON `kontakty`
-FOR EACH ROW
-BEGIN
-IF NEW.telefon1 NOT REGEXP '^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}$' THEN
-  SIGNAL SQLSTATE '10009'
-     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon1` jest niepoprawna!';
-END IF;
-
-IF NEW.telefon2 NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
-  SIGNAL SQLSTATE '10010'
-     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon2` jest niepoprawna!';
-END IF;
-
-IF NEW.fax NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
-  SIGNAL SQLSTATE '10011'
-     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `fax` jest niepoprawna!';
-END IF;
-
-IF NEW.email NOT LIKE '%_@%_.__%' THEN
-  SIGNAL SQLSTATE VALUE '10012'
-    SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `email` jest niepoprawna!';
-END IF;
-END//
+-- DROP TRIGGER IF EXISTS sklepbd.kontakty_BINS//
+-- USE `sklepbd`//
+-- CREATE TRIGGER `kontakty_BINS` BEFORE INSERT ON `kontakty`
+-- FOR EACH ROW
+-- BEGIN
+-- IF NEW.telefon1 NOT REGEXP '^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}$' THEN
+--   SIGNAL SQLSTATE '10009'
+--      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon1` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.telefon2 NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
+--   SIGNAL SQLSTATE '10010'
+--      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `telefon2` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.fax NOT REGEXP '^(\\+?[0-9]{1,4}-)?[0-9]{3,10}$' THEN
+--   SIGNAL SQLSTATE '10011'
+--      SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `fax` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.email NOT LIKE '%_@%_.__%' THEN
+--   SIGNAL SQLSTATE VALUE '10012'
+--     SET MESSAGE_TEXT = '[tabla:kontakty] - kolumna `email` jest niepoprawna!';
+-- END IF;
+-- END//
 
 DELIMITER //
 
@@ -463,31 +463,31 @@ END IF;
 
 END//
 
-DELIMITER //
-
-CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`produkty_BEFORE_INSERT` BEFORE INSERT ON `produkty` FOR EACH ROW
-BEGIN
-IF NEW.nazwa NOT REGEXP '^([[:alnum:]]{2,}[[:space:]]?){1,}$' THEN #przynajmniej 2 znaki i/lub cyfry, ? - 0 lub 1 znak spacji <- przynajmniej raz
-  SIGNAL SQLSTATE '10019'
-     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `nazwa` jest niepoprawna!';
-END IF;
-
-IF NEW.opis NOT REGEXP '^([[:alnum:]]+[[.comma.]]?[[.period.]]?[[.colon.]]?[[.semicolon.]]?[[.hyphen.]]?[[:space:]]?){1,}[[.period.]]?$' THEN #przynajmniej 1 znak, ? - 0 lub 1 znak [spacji , . : ; - ] <- przynajmniej raz
-  SIGNAL SQLSTATE '10020'
-     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `opis` jest niepoprawna!';
-END IF;
-
-IF NEW.cenaNetto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
-  SIGNAL SQLSTATE '10021'
-     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaNetto` jest niepoprawna!';
-END IF;
-
-IF NEW.cenaBrutto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
-  SIGNAL SQLSTATE '10021'
-     SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaBrutto` jest niepoprawna!';
-END IF;
-
-END//
+-- DELIMITER //
+--
+-- CREATE DEFINER = CURRENT_USER TRIGGER `sklepbd`.`produkty_BEFORE_INSERT` BEFORE INSERT ON `produkty` FOR EACH ROW
+-- BEGIN
+-- IF NEW.nazwa NOT REGEXP '^([[:alnum:]]{2,}[[:space:]]?){1,}$' THEN #przynajmniej 2 znaki i/lub cyfry, ? - 0 lub 1 znak spacji <- przynajmniej raz
+--   SIGNAL SQLSTATE '10019'
+--      SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `nazwa` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.opis NOT REGEXP '^([[:alnum:]]+[[.comma.]]?[[.period.]]?[[.colon.]]?[[.semicolon.]]?[[.hyphen.]]?[[:space:]]?){1,}[[.period.]]?$' THEN #przynajmniej 1 znak, ? - 0 lub 1 znak [spacji , . : ; - ] <- przynajmniej raz
+--   SIGNAL SQLSTATE '10020'
+--      SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `opis` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.cenaNetto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
+--   SIGNAL SQLSTATE '10021'
+--      SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaNetto` jest niepoprawna!';
+-- END IF;
+--
+-- IF NEW.cenaBrutto <= 0 or NEW.cenaNetto > 1e6 THEN #zakres od 0-1000000
+--   SIGNAL SQLSTATE '10021'
+--      SET MESSAGE_TEXT = '[tabla:produkty] - kolumna `cenaBrutto` jest niepoprawna!';
+-- END IF;
+--
+-- END//
 
 DELIMITER //
 
