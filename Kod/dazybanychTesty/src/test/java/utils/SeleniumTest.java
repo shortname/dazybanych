@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -72,6 +73,10 @@ public class SeleniumTest {
 
     protected List<Integer> findShownRows(){
         return webDriver.findElements(By.className("product")).stream().map(el -> Integer.parseInt(el.getAttribute("id"))).collect(Collectors.toList());
+    }
+
+    protected void chooseClient(int clientId){
+        new Select(webDriver.findElement(By.id("client"))).selectByValue(""+clientId);
     }
     
     @AfterClass

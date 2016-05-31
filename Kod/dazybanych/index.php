@@ -104,7 +104,7 @@ $clients = "SELECT id, imie, nazwisko FROM klienci ORDER BY nazwisko;";
             <form method="GET" action="zamowienie.php">
                 <div  style="width:49%; display: inline-block;">
                     Klient:
-                    <select name="client" style="width:100%;">
+                    <select name="client" id="client" style="width:100%;">
                         <?php
                             $wynik = mysqli_query($link, $clients);
                             while($rekord = mysqli_fetch_assoc($wynik)){
@@ -140,15 +140,6 @@ $clients = "SELECT id, imie, nazwisko FROM klienci ORDER BY nazwisko;";
                     }
                     print "</tbody></table></body></html>";
                 ?>
-                <div style="display: inline-block;">
-                    <input type="radio" name="payment" value="card"/> Karta<br />
-                </div>
-                <div style="display: inline-block;">
-                    <input type="radio" name="payment" value="cash"/> Gotówka<br />
-                </div>
-                <div style="display: inline-block;">
-                    <input type="radio" name="payment" value="transfer"/> Przelew<br />
-                </div><br />
                 <div style="display: inline-block;">
                     <input type="submit" id="orderButton" value="Zamów" />
                 </div>

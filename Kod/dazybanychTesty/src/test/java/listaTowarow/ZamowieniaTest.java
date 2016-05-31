@@ -44,8 +44,8 @@ public class ZamowieniaTest extends SeleniumTest {
         List<OrderDetails> expectedSecondOrderDetails = createExpectedOrder(secondOrder, 2);
 
         //when
-        order(firstOrder);
-        order(secondOrder);
+        order(firstOrder, 1);
+        order(secondOrder, 2);
 
         //then
         List<Order> actualOrders = db.findOrders();
@@ -55,8 +55,9 @@ public class ZamowieniaTest extends SeleniumTest {
         Assertions.assertThat(db.findStorageDataOfProducts(productIds).getStorageData()).containsOnlyElementsOf(storageDataStore.getStorageData());
     }
     
-    private void order(Map<Integer, Integer> details){
+    private void order(Map<Integer, Integer> details, int clientId){
         getTo("/");
+        chooseClient(clientId);
         details.entrySet().stream().forEach(detail -> typeOrderAmount(detail.getKey(), detail.getValue()));
         clickZamow();
     }
@@ -69,8 +70,8 @@ public class ZamowieniaTest extends SeleniumTest {
 
     private List<Order> createExpectedOrders(){
         List<Order> result = new ArrayList<>();
-        result.add(new Order(0, 1, "S"));
-        result.add(new Order(0, 1, "S"));
+        result.add(new Order(0, 1, "przyjete"));
+        result.add(new Order(0, 2, "przyjete"));
         return result;
     }
 
