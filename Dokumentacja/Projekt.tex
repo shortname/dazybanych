@@ -196,7 +196,7 @@ Model logiczny bazy danych zamieszczono na~Rysunku~\ref{fig:modelLogiczny}.
 \end{figure}
 \subsubsection{Model fizyczny i ograniczenia integralności danych}
 \paragraph{Ograniczenia integralności danych} \mbox{}\\
-Integralność i~spójność danych powinna być zapewniona przez aplikację dostępową. Produkty dodawane do~zamówień powinny być jednocześnie odejmowane z~magazynów. W przypadku gdy zamówienie nie~może być zrealizowane, transakcja z~bazą danych powinna być wycofana i~nie~powinna modyfikować stanu rekordów.
+Integralność i~spójność danych powinna być zapewniona triggery i procedury. Produkty dodawane do~zamówień powinny być jednocześnie odejmowane z~magazynów. W przypadku gdy zamówienie nie~może zostać zrealizowane, transakcja z~bazą danych powinna być wycofana i~nie~powinna modyfikować stanu rekordów.
 
 \paragraph{Model fizyczny} \mbox{}\\
 Model fizyczny bazy danych zamieszczono na~Rysunku~\ref{fig:modelFizyczny}.
@@ -237,16 +237,15 @@ Aplikacja zbudowana jest w~oparciu o~część webową w~postaci strony interneto
 	\label{tab:wybraneFunkcjeSystemu}
 		\hskip-2.5cm\begin{tabular}{ l c c }
 			Operacja & Dane wejściowe & Dane wyjściowe \\ \hline
-			Przeglądanie produktów & Lista \textit{ID} producentów i Lista \textit{ID} kategorii & Przefiltrowana tabela produktów \\ \hline
-		    Tworzenie zamówienia & \textit{ID} klienta Lista towarów wraz z ilościami & Powodzenie operacji \\ \hline
+			Przeglądanie produktów & Lista \textit{ID} producentów i lista \textit{ID} kategorii & Przefiltrowana tabela produktów \\ \hline
+		    Tworzenie zamówienia & \textit{ID} klienta i lista towarów wraz z ilościami & Powodzenie operacji \\ \hline
 		\end{tabular}
 \end{table}
 
 \subsubsection{Metoda podłączania do bazy danych – integracja z bazą danych}
 Komunikacja z~bazą danych ze~strony serwerowej odbywa się za~pomocą biblioteki języka PHP, umożliwiającej wydawanie zapytań SQL.
 \subsubsection{Projekt zabezpieczeń na poziomie aplikacji}
-Wydawania zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą interfejsu dostępowego. Wszelkie operacje związane z~bazą danych są~ukryte poprzez interfejs użytkownika, w~związku z~czym nie~jest możlie uzyskanie dostępu do~danych w~sposób inny, niż ten udostępniony przez aplikację.\\\\
-Transakcje odbywają się za~pomocą formularzy, które są~przetwarzane po~stronie bazy danych.
+Wydawania zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą interfejsu dostępowego. Wszelkie operacje związane z~bazą danych są~ukryte poprzez interfejs użytkownika, w~związku z~czym nie~jest możlie uzyskanie dostępu do~danych w~sposób inny, niż ten udostępniony przez aplikację.
 
 \section{Implementacja systemu}
 \subsection{Realizacja bazy danych}
@@ -272,7 +271,7 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \item Filtruje dane w tabeli produktów względem zadanych kryteriów.
 \item Zwraca użytkownikowi wyłącznie dopasowane rekordy.
 \end{itemize}
-\item Funkcja - utwórzZamówienie
+\item Funkcja - otwórzZamówienie
 \begin{itemize}
 \item Tworzy rekord w tabeli z zamówieniami.
 \item Zwraca id utworzonego zamówienia.
@@ -318,7 +317,7 @@ Dostęp do systemu odbywa się za pomocą interfejsu przedstawionego na~Rysunku~
 	\label{fig:interfejsUżytkownika}
 \end{figure}
 
-Użytkownik ma możliwość wyboru z listy rozwijanej [Rysunek~\ref{fig:listaRozwijana}] nazwy konta na które będzie realizowane zamówienie. Dodatkowo istnieje możliwość filtrowania listy aktualnie wyświetlonych produktów za pomocą panelu znajdującego się na~Rysunku~\ref{fig:panelFiltrowaniaProduktów}.
+Użytkownik ma możliwość wyboru z listy rozwijanej (Rysunek~\ref{fig:listaRozwijana}) nazwy konta na które będzie realizowane zamówienie. Dodatkowo istnieje możliwość filtrowania listy aktualnie wyświetlonych produktów za pomocą panelu znajdującego się na~Rysunku~\ref{fig:panelFiltrowaniaProduktów}.
 
 \begin{figure}[H]
 	\centering
@@ -333,7 +332,31 @@ Użytkownik ma możliwość wyboru z listy rozwijanej [Rysunek~\ref{fig:listaRoz
 \end{figure}
 
 \subsubsection{Implementacja wybranych funkcjonalności systemu}
-todo: easy
+\paragraph{Przeglądanie listy towarów} \mbox{}\\
+System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Dodatkowo, jeżeli użytkownik poda listę producentów bądź listę kategoriów, wywoływana jest procedura \textit{filtrujProdukty}, za pomocą której wydobywane są dane spełniające zadane kryteria. Dane są zwracane jako widok listaTowarów.
+\paragraph{Tworzenie zamówienia} \mbox{}\\
+Po wybraniu przez klienta wybranych produktów i wybraniu opcji \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych zamówienia transakcja jest kierowana do bazy danych gdzie przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{Screeny/ZamowieniePoprawne.JPG}
+	\caption[Stan zamówienia - powodzenie operacji]{Komunikat o stanie utworzonego zamówienia - powodzenie operacji}
+	\label{fig:stanZamówieniaPowodzenie}
+
+	\includegraphics[width=5cm]{Screeny/ZamowienieNiepoprawne.JPG}
+	\caption[Stan zamówienia - niepowodzenie operacji]{Komunikat o stanie utworzonego zamówienia - niepowodzenie operacji}
+	\label{fig:stanZamówieniaNiepowodzenie}
+\end{figure}
+\paragraph{Filtrowanie produktów} \mbox{}\\
+Podczas przeglądania tabeli dostępnych produktów użytkownik może wybrać dokonać filtracji poprzez wybranie w panelu bocznym z~Rysunku~\ref{fig:panelFiltrowaniaProduktów} producentów bądź kategorii. Po naciśnięciu przycisku \textit{Filtruj} wywoływana jest procedura \textit{filtrujProdukty} zwracająca widok. Następnie dane są wyświetlane użytkownikowi. Przykładowy wynik operacji zamieszczono na~Rysunku~\ref{fig:rezultatFiltracji}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{Screeny/Filtrowanie2.JPG}
+	\caption[Widok tabeli towarów po filtracji]{Widok tabeli towarów po filtracji}
+	\label{fig:rezultatFiltracji}
+\end{figure}
+
 \subsubsection{Implementacja mechanizmów bezpieczeństwa}
 Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu danych na~magazynie, co~sprowadza się do~kierowania zapytań do~bazy danych o~aktualny stan towarów i~uniemożliwienie użytkownikowi wybrania większej ilości niż jest dostępne.
 \section{Testowanie systemu}
