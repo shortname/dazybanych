@@ -218,7 +218,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `sklepbd`.`sprzedaz`
 -- -----------------------------------------------------
-CREATE TABLE `sprzedaz` (
+CREATE TABLE IF NOT EXISTS `sklepbd`.`sprzedaz` (
   `id` int(10) UNSIGNED NOT NULL,
   `idZamowienia` int(10) UNSIGNED NOT NULL,
   `idPracownika` int(10) UNSIGNED NOT NULL,
@@ -275,7 +275,7 @@ ENGINE = InnoDB;
 -- Table `sklepbd`.`zamowienia`
 -- -----------------------------------------------------
 
-CREATE TABLE `zamowienia` (
+CREATE TABLE IF NOT EXISTS `sklepbd`.`zamowienia` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idKlienta` int(10) UNSIGNED NOT NULL,
   `dataDodania` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -293,7 +293,7 @@ CREATE TABLE `zamowienia` (
 -- Table `sklepbd`.`zamowienia_produkty`
 -- -----------------------------------------------------
 
-CREATE TABLE `zamowienia_produkty` (
+CREATE TABLE IF NOT EXISTS `sklepbd`.`zamowienia_produkty` (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `idZamowienia` int(11) UNSIGNED NOT NULL,
   `idMagazynu` int(11) UNSIGNED NOT NULL,
