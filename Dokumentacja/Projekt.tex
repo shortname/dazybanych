@@ -13,7 +13,8 @@
             anchorcolor = blue]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=black}
 \usepackage{listings}
-\usepackage{pbox}
+\usepackage{verbatim}
+
 
 \begin{document}
 \begin{titlepage}
@@ -196,7 +197,7 @@ Model logiczny bazy danych zamieszczono na~Rysunku~\ref{fig:modelLogiczny}.
 \end{figure}
 \subsubsection{Model fizyczny i ograniczenia integralności danych}
 \paragraph{Ograniczenia integralności danych} \mbox{}\\
-Integralność i~spójność danych powinna być zapewniona triggery i procedury. Produkty dodawane do~zamówień powinny być jednocześnie odejmowane z~magazynów. W przypadku gdy zamówienie nie~może zostać zrealizowane, transakcja z~bazą danych powinna być wycofana i~nie~powinna modyfikować stanu rekordów.
+Integralność i~spójność danych powinna być zapewniona triggery i procedury. Produkty dodawane do~zamówień powinny być jednocześnie odejmowane z~magazynów. W przypadku gdy zamówienie nie~może zostać zrealizowane, transakcja z~bazą danych powinna zostać wycofana i~nie~modyfikować stanu rekordów.
 
 \paragraph{Model fizyczny} \mbox{}\\
 Model fizyczny bazy danych zamieszczono na~Rysunku~\ref{fig:modelFizyczny}.
@@ -245,7 +246,7 @@ Aplikacja zbudowana jest w~oparciu o~część webową w~postaci strony interneto
 \subsubsection{Metoda podłączania do bazy danych – integracja z bazą danych}
 Komunikacja z~bazą danych ze~strony serwerowej odbywa się za~pomocą biblioteki języka PHP, umożliwiającej wydawanie zapytań SQL.
 \subsubsection{Projekt zabezpieczeń na poziomie aplikacji}
-Wydawania zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą interfejsu dostępowego. Wszelkie operacje związane z~bazą danych są~ukryte poprzez interfejs użytkownika, w~związku z~czym nie~jest możlie uzyskanie dostępu do~danych w~sposób inny, niż ten udostępniony przez aplikację.
+Wydawanie zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą interfejsu dostępowego. Wszelkie operacje związane z~bazą danych są~ukryte poprzez interfejs użytkownika, w~związku z~czym nie~jest możlie uzyskanie dostępu do~danych w~sposób inny, niż ten oferowany przez aplikację.
 
 \section{Implementacja systemu}
 \subsection{Realizacja bazy danych}
@@ -307,7 +308,7 @@ Serwis umożliwia także wygodną administrację dla użytkownika \textit{root},
 \subsection{Realizacja elementów aplikacji}
 \subsubsection{Obsługa menu}
 \subsubsection{Walidacja i filtracja}
-System zapewnia walidację po stronie aplikacji jak i bazy danych. Uzupełnianie pól w aplikacji jest analizowane z poziomu interfejsu użytkownika oraz w przypadku nieprawidłowości, natychmiast są kierowane do użytkownika stosowne ostrzeżenia. Po stronie systemu bazodanowego, przed złożeniem zamówienia, sprawdzany jest stan produktów na magazynach. W przypadku niewystarczającej ilości towarów, zamówienie jest wycofywane z~systemu i~użytkownik otrzymuje powiadomienie o niepowodzeniu operacji.
+System zapewnia walidację po stronie aplikacji jak i bazy danych. Uzupełnianie pól w aplikacji jest analizowane z poziomu interfejsu użytkownika oraz w przypadku nieprawidłowości, natychmiast kierowane są do użytkownika stosowne ostrzeżenia. Po stronie systemu bazodanowego, przed złożeniem zamówienia, sprawdzany jest stan produktów na magazynach. W przypadku niewystarczającej ilości towarów, zamówienie jest wycofywane z~systemu i~użytkownik otrzymuje powiadomienie o niepowodzeniu operacji.
 \subsubsection{Implementacja interfejsu dostępu do bazy danych}
 Dostęp do systemu odbywa się za pomocą interfejsu przedstawionego na~Rysunku~\ref{fig:interfejsUżytkownika}.
 
@@ -335,7 +336,7 @@ Użytkownik ma możliwość wyboru z listy rozwijanej (Rysunek~\ref{fig:listaRoz
 \paragraph{Przeglądanie listy towarów} \mbox{}\\
 System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Dodatkowo, jeżeli użytkownik poda listę producentów bądź listę kategoriów, wywoływana jest procedura \textit{filtrujProdukty}, za pomocą której wydobywane są dane spełniające zadane kryteria. Dane są zwracane jako widok listaTowarów.
 \paragraph{Tworzenie zamówienia} \mbox{}\\
-Po wybraniu przez klienta wybranych produktów i wybraniu opcji \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych zamówienia transakcja jest kierowana do bazy danych gdzie przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
+Po wybraniu przez klienta wybranych produktów i naciśnięciu przycisku \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych transakcja kierowana jest do bazy danych, gdzie przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
 
 \begin{figure}[H]
 	\centering
@@ -348,7 +349,7 @@ Po wybraniu przez klienta wybranych produktów i wybraniu opcji \textit{Zamów} 
 	\label{fig:stanZamówieniaNiepowodzenie}
 \end{figure}
 \paragraph{Filtrowanie produktów} \mbox{}\\
-Podczas przeglądania tabeli dostępnych produktów użytkownik może wybrać dokonać filtracji poprzez wybranie w panelu bocznym z~Rysunku~\ref{fig:panelFiltrowaniaProduktów} producentów bądź kategorii. Po naciśnięciu przycisku \textit{Filtruj} wywoływana jest procedura \textit{filtrujProdukty} zwracająca widok. Następnie dane są wyświetlane użytkownikowi. Przykładowy wynik operacji zamieszczono na~Rysunku~\ref{fig:rezultatFiltracji}.
+Podczas przeglądania tabeli dostępnych produktów użytkownik może dokonać filtracji poprzez wybranie w panelu bocznym z~Rysunku~\ref{fig:panelFiltrowaniaProduktów} producentów bądź kategorii. Po naciśnięciu przycisku \textit{Filtruj} wywoływana jest procedura \textit{filtrujProdukty} zwracająca widok. Następnie dane są wyświetlane użytkownikowi. Przykładowy wynik operacji zamieszczono na~Rysunku~\ref{fig:rezultatFiltracji}.
 
 \begin{figure}[H]
 	\centering
@@ -358,7 +359,26 @@ Podczas przeglądania tabeli dostępnych produktów użytkownik może wybrać do
 \end{figure}
 
 \subsubsection{Implementacja mechanizmów bezpieczeństwa}
+\paragraph{Sprawdzanie stanu magazynów} \mbox{}\\
 Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu danych na~magazynie, co~sprowadza się do~kierowania zapytań do~bazy danych o~aktualny stan towarów i~uniemożliwienie użytkownikowi wybrania większej ilości niż jest dostępne.
+\paragraph{Triggery} \mbox{}\\
+Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację rekordów bazy poprzez zastosowanie mechanizmu wyrażeń regularnych. 
+
+\begin{table}[H]
+	\caption[Tablica wybranych triggerów]{Tablica wybranych triggerów zaimplementowanych w systemie}
+	\label{tab:tabelaTrigerów}
+		\hskip-1cm\begin{tabular}{ l l }
+			Trigger & Wyrażenie regularne \\ \hline
+			Kod pocztowy & \verb=^[0-9]{2}\-[0-9]{3}= \\ \hline
+			Ulica & \verb=^((ul.|al.|os.|rondo|zaułek|skwer)\ )([A-Za-z]{2,100}\ ?)+= \\ \hline
+			NIP & \verb=^[0-9]{10}|[0-9]{3}\-[0-9]{3}\-[0-9]{2}\-[0-9]{2}= \\ \hline
+			Telefon & \verb=^(\\+?[0-9]{1,4}-?)?[0-9]{3,10}= \\ \hline
+			Nazwa producenta & \verb=^([A-Za-z0-9]{2,100}\ ?){1,100}= \\ \hline
+			Hasło sha256 & \verb=^[0-9a-f]{32}= \\ \hline
+		\end{tabular}
+\end{table}
+
+
 \section{Testowanie systemu}
 \subsection{Instalacja i konfigurowanie systemu}
 \paragraph{Do pobrania}
@@ -383,7 +403,7 @@ Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu da
 	\item Dopisz na końcu znalezionego pliku tekst \lstinputlisting{wklejka.txt}, zamieniając XXX na ścieżkę do katalogu z pobranym projektem.
 	\item Uruchom serwer \quotedblbase Apache\textquotedblright z poziomu \quotedblbase XAMPP Control Panel\textquotedblright
 	\item Wejdź do przeglądarki internetowej
-	\item Wejdź na \url{http://localhost}. Jeżeli zobaczyłeś stronę \quotedblbase Hello world!\textquotedblright, to znaczy, że operacja się powiodła
+	\item Wejdź na \url{http://localhost}. Jeżeli zobaczyłeś stronę \quotedblbase Hello world!\textquotedblright, to znaczy, że operacja powiodła się
 \end{enumerate}
 \paragraph{MySql Server}
 \begin{enumerate}
@@ -392,19 +412,17 @@ Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu da
 	\item W linijkach \quotedblbase Apache\textquotedblright , \quotedblbase MySQL\textquotedblright wybierz \quotedblbase Start\textquotedblright
 	\item Otwórz przeglądarkę internetową i wejdź na \url{http://localhost/phpmyadmin} i sprwadź czy pojawiło się okno logowania z Rysunku \ref{fig:logowanieDophpMyAdmin}.
 	\item Wejdź w zakładkę \quotedblbase User accounts\textquotedblright, zaznacz wszystkich użytkowników poza \quotedblbase root\textquotedblright na \quotedblbase localhost\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright u dołu strony.
-	\item Po usunięciu użytkowników wybierz \quotedblbase Edit privileges\textquotedblright przy pozostałym użytkowniku.
 	\item W ustawieniach zmień hasło na \quotedblbase admin\textquotedblright i kliknij \quotedblbase Wykonaj\textquotedblright.
 	Po odświeżeniu strony powinien pokazać się następujący komunikat:
 	\texttt{\quotedblbase Nie udało się nawiązać połączenia: błędne ustawienia.\textquotedblright}.
-	\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik phpMyAdmin\textbackslash config.inc.php
-	\item W znalezionym pliku jako zmień wartość przypisania:\\
+	\item Znajdź w folderze instalacyjnym XAMPP`a plik phpMyAdmin/config.inc.php
+	\item W znalezionym pliku zmień wartość przypisania:\\
 			\begin{lstlisting}
 $cfg['Servers'][$i]['password'] = '';
 			\end{lstlisting}
 			na 'admin'
 		\item Po odświeżeniu strony powinienieś zobaczyć panel administracyjny bazy danych.
-		%Wykreśliłem, bo NetBeans ma spore problemy z kodowaniem plików SQL wygenerowanych przez phpMyAdmin
-		\item Z górnego menu wybierz \quotedblbase Import\textquotedblright. W widoku importu wybierz plik z Baza Danych\textbackslash sklep{\_}sportowy.sql, upewnij się, że ustawione jest kodowanie znaków jako \quotedblbase utf-8\textquotedblright. Kliknij \quotedblbase Wykonaj\textquotedblright.
+		\item Z górnego menu wybierz \quotedblbase Import\textquotedblright. W widoku importu wybierz plik z Baza Danych/sklep{\_}sportowy.sql, upewnij się, że ustawione jest kodowanie znaków jako \quotedblbase utf-8\textquotedblright. Kliknij \quotedblbase Wykonaj\textquotedblright.
 		\item Otwórz przeglądarkę i wejdź na \url{http://localhost/login.php}
 		\item Po zalogowaniu (\quotedblbase admin\textquotedblright, \quotedblbase admin\textquotedblright) powinna wyświetlić się lista towarów. Wszystkie polskie znaki powinny być wyświetlane poprawnie.
 \end{enumerate}
