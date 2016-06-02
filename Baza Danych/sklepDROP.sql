@@ -580,7 +580,7 @@ CREATE FUNCTION otworzZamowienie(
 RETURNS INT UNSIGNED
 NOT DETERMINISTIC
 BEGIN
-  INSERT INTO zamowienia (idKlienta, status) VALUES (id_klienta, 'S');
+  INSERT INTO zamowienia (idKlienta, status) VALUES (id_klienta, 'przyjete');
   RETURN LAST_INSERT_ID();
 END //
 

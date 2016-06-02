@@ -15,6 +15,12 @@
 \usepackage{listings}
 \usepackage{verbatim}
 
+\newcommand{\snippet}[2]{
+
+\lstinputlisting[language=#1,basicstyle=\small,breaklines=true,showstringspaces=false]{Snippety/#2}
+
+}
+
 
 \begin{document}
 \begin{titlepage}
@@ -260,17 +266,25 @@ Wydawanie zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą inte
 \paragraph{Tworzenie tabel}
 Inicjalizacja systemu bazodanowego odbywa~się za~pomocą usługi phpmyadmin. W~celu zalogowania do~usługi, należy wybrać w~przeglądarce internetowej adres \url{http://localhost/phpmyadmin} oraz wprowadzić dane logowania do~formularza przedstawionego na~Rysunku~\ref{fig:logowanieDophpMyAdmin}. Następnie należy wybrać z~menu opcję \textit{Import} (Rysunek \ref{fig:phpMyAdmin}), \textit{Import z pliku .sql}, podać ścieszkę do~przygotowanego pliku z~bazą danych i~zatwierdzić operację poprzez wybranie \textit{OK}.
 
+\snippet{SQL}{tworzenieTabel.sql}
+
 \paragraph{Definiowanie ograniczeń}
 Ograniczenia dotyczące poprawności wprowadzanych danych przez użytkownika zaimplementowane są~w postaci \textit{triggerów}, które są~automatycznie ładowane do~bazy danych w~chwili importowania przygotowanego pliku \textit{.sql}.
+
+\snippet{SQL}{triggery.sql}
+
 \subsubsection{Implementacja mechanizmów przetwarzania danych}
 Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zrealizowane są za pomocą \textit{procedur}, \textit{funkcji} oraz \textit{widoków}. Wybrane mechanizmy stosowane w systemie zestawiono poniżej:
 
 \begin{enumerate}
-\item Procedura - dodajDoZamowinia
+\item Procedura - dodajDoZamowienia
 \begin{itemize}
 \item Dodaje do zamówienia wybrane towary.
 \item Aktualizuje stan magazynów.
 \item W przypadku wyczerpania zasobów na magazynie, usuwa rekord z tabeli.
+
+\snippet{SQL}{procedura.sql}
+
 \end{itemize}
 \item Procedura - filtrujProdukty
 \begin{itemize}
@@ -282,6 +296,9 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \begin{itemize}
 \item Tworzy rekord w tabeli z zamówieniami.
 \item Zwraca id utworzonego zamówienia.
+
+\snippet{SQL}{funkcja.sql}
+
 \end{itemize}
 \item Widok - listaTowarów
 \begin{itemize}
@@ -500,7 +517,26 @@ Weryfikacja odporności bazy danych na~ataki SQL Injection nie~była konieczna, 
 \subsection{Wnioski z testów}
 Testy zweryfikowały poprawność działania zaimplementowanych funkcjonalności. Ich różnorodność pozwoliła na~sprawdzenie systemu na~różnych poziomach abstrakcji. Zastosowanie testów sprawdzających działanie interfejsu poprzez symulowanie zachowania użytkownika pozwoliło na~sprawdzenie systemu w~środowisku jak~najbardziej zbliżonym do~rzeczywistego użytkowania. Wszystkie testy zwróciły wynik pozytywny.
 \section{Podsumowanie}
-System internetowego sklepu sportowego opartego o relacynją bazę danych zrealizowano pomyślnie. Wybrane funkcje działają w sposób prawidłowy.
+%Celem zadania było zaprojektowanie i zaimplementowanie relacyjnej bazy danych na potrzeby internetowego sklepu sportowego.
+%Pierwszym krokiem było określenie przypadków użycia projektowanej aplikacji, które zebrano w formie diagramu. Kolejnym etapem fazy projektowej było stworzenie modelu konceptualnego, który obrazował relacje zachodzące pomiędzy zaplanowanymi tabelami. Gdy te zależności zostały określone,  
+\begin{itemize}
+	\item Cel projektu: zaprojektowanie i implementacja relacyjnej bazy danych na potrzeby sportowego sklepu internetowego; stworzenie prostej webowej aplikacji do obsługi wybranych funkcjonalności; przetestowanie funkcjonalności
+	\item Kroki:
+		\begin{itemize}
+		\item Analiza rzeczywistości - zebranie wymagań funkcjonalnych i niefunkcjonalnych (funkcjonalnych w formie diagramu przypadków użycia)		
+		\item Stworzenie diagramu konceptualnego - określenie jakie tabele będą potrzebne i jakie relacje między nimi zachodzą
+		\item Diagram logiczny - co w tych tabelach będzie
+		\item Diagram fizyczny - jakie typy bazodanowe są potrzebne, normalizacja(?)
+		\item Dobór narzędzi i technologii
+		\item Stworzenie tabel
+		\item Stworzenie relacji pomiędzy tabelami (klucze obce)
+		\item Triggery - walidacja danych wchodzących do bazy
+		\item Widok
+		\item Porcedury i funkcja - wykorzystanie wszystkich możliwości bazy danych (odciążenie back-endu)
+		\item Aplikacja webowa - pokazanie, że stworzona baza może być praktycznie wykorzystana
+		\item Testy funkcjonalne - sprawdzenie, czy mechanizmy bazodanowe funkcjonują poprawnie; ułatwienia dalszego rozwoju aplikacji
+\end{itemize}		  
+\end{itemize}
 \cleardoublepage
 \bibliographystyle {IEEEtran}
 \bibliography {bibliografia}
