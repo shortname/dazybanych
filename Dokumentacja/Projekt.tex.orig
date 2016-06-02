@@ -14,12 +14,13 @@
 \hypersetup{colorlinks=true, linkcolor=black}
 \usepackage{listings}
 \usepackage{verbatim}
+<<<<<<< HEAD
 \lstset{
   literate={ó}{{\'o}}1
            {ę}{{\k e}}1
            {ą}{{\k a}}1
            {ł}{{\l{}}}1
-}
+=======
 \usepackage{caption}
 
 \DeclareCaptionLabelSeparator{bar} {. }
@@ -30,12 +31,11 @@ labelsep=bar
 \AtBeginDocument{%
   \renewcommand\tablename{\ \ Tabela}
   \renewcommand\figurename{Rysunek}
-  \renewcommand\lstlistingname{Listing}
 }
 
 \addto\captionspolish{%
   \renewcommand\listtablename{Spis tabel}%
-  \renewcommand\lstlistlistingname{Spis listingów}
+>>>>>>> b1a726804bbd40d9e64cfe917c028dd6d39ef532
 }
 
 \newcommand{\snippet}[3]{
@@ -43,13 +43,18 @@ labelsep=bar
 \lstinputlisting[language=#1,basicstyle=\small,breaklines=true,showstringspaces=false,caption=#3]{Snippety/#2}
 
 }
+<<<<<<< HEAD
+
+\renewcommand\lstlistingname{List.}
+\renewcommand\lstlistlistingname{Spis listingów}
+=======
 \usepackage{etoolbox}
 \makeatletter
 \patchcmd{\@caption}{\csname the#1\endcsname}{\csname fnum@#1\endcsname.}{}{}
 \renewcommand*\l@figure{\@dottedtocline{1}{0cm}{2.4cm}}
-\let\l@lstlisting\l@figure
 \let\l@table\l@figure
 \makeatother
+>>>>>>> b1a726804bbd40d9e64cfe917c028dd6d39ef532
 
 \begin{document}
 \begin{titlepage}
@@ -105,6 +110,10 @@ labelsep=bar
 
 \listoftables
 \addcontentsline{toc}{section}{Spis tabel}
+\cleardoublepage
+
+\lstlistoflistings
+\addcontentsline{toc}{section}{\lstlistlistingname}
 \cleardoublepage
 
 \section{Wstęp}
@@ -335,7 +344,10 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \item Tworzy rekord w tabeli z zamówieniami.
 \item Zwraca id utworzonego zamówienia.
 
+<<<<<<< HEAD
 \snippet{SQL}{funkcja.sql}{Przykładowa funkcja}
+=======
+>>>>>>> b1a726804bbd40d9e64cfe917c028dd6d39ef532
 
 \end{itemize}
 \item Widok - listaTowarów
