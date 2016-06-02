@@ -48,6 +48,7 @@
 	{\large Wrocław 2016\par}
 \end{titlepage}
 
+\pagenumbering{gobble}
 \tableofcontents
 \cleardoublepage
 
@@ -362,7 +363,7 @@ Podczas przeglądania tabeli dostępnych produktów użytkownik może dokonać f
 \paragraph{Sprawdzanie stanu magazynów} \mbox{}\\
 Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu danych na~magazynie, co~sprowadza się do~kierowania zapytań do~bazy danych o~aktualny stan towarów i~uniemożliwienie użytkownikowi wybrania większej ilości niż jest dostępne.
 \paragraph{Triggery} \mbox{}\\
-Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację rekordów bazy poprzez zastosowanie mechanizmu wyrażeń regularnych. 
+Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację rekordów bazy poprzez zastosowanie wyrażeń regularnych. W systemie są wykorzystywane podczas wstawiania rekordów do tabel, w przypadku niezgodności z wyrażeniem rekord jest odrzucany. Wybrane triggery zaimplementowane w~systemie zestawiono w~Tablicy~\ref{tab:tabelaTrigerów}.
 
 \begin{table}[H]
 	\caption[Tablica wybranych triggerów]{Tablica wybranych triggerów zaimplementowanych w systemie}
