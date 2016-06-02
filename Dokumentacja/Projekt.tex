@@ -285,8 +285,12 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \end{itemize}
 \item Widok - listaTowarów
 \begin{itemize}
-\item Łączy nazwy producentów wraz z kategoriami produktów.
-\item Zwraca całość jako zaopatrzenie.
+\item Dołącza do tabeli produktów
+\begin{itemize}
+\item Nazwy producentów
+\item Nazwy kategorii
+\item Informacje o stanie magazynów
+\end{itemize}
 \end{itemize}
 \end{enumerate}
 
@@ -340,9 +344,9 @@ Użytkownik ma możliwość wyboru z listy rozwijanej (Rysunek~\ref{fig:listaRoz
 
 \subsubsection{Implementacja wybranych funkcjonalności systemu}
 \paragraph{Przeglądanie listy towarów} \mbox{}\\
-System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Dodatkowo, jeżeli użytkownik poda listę producentów bądź listę kategoriów, wywoływana jest procedura \textit{filtrujProdukty}, za pomocą której wydobywane są dane spełniające zadane kryteria. Dane są zwracane jako widok listaTowarów.
+System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Dodatkowo, jeżeli użytkownik poda listę producentów bądź listę kategorii, wywoływana jest procedura \textit{filtrujProdukty}, za pomocą której wydobywane są dane spełniające zadane kryteria. Dane są zwracane jako widok listaTowarów.
 \paragraph{Tworzenie zamówienia} \mbox{}\\
-Po wybraniu przez klienta wybranych produktów i naciśnięciu przycisku \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych transakcja kierowana jest do bazy danych, gdzie przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
+Po wybraniu przez klienta wybranych produktów i naciśnięciu przycisku \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych transakcja kierowana jest do bazy danych, gdzie przed wstawieniem każdego rekordu przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
 
 \begin{figure}[H]
 	\centering
