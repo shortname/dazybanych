@@ -14,44 +14,73 @@
 \hypersetup{colorlinks=true, linkcolor=black}
 \usepackage{listings}
 \usepackage{verbatim}
+\usepackage{caption}
+
+\DeclareCaptionLabelSeparator{bar} {. }
+\captionsetup{
+labelsep=bar
+}
+
+\AtBeginDocument{%
+  \renewcommand\tablename{\ \ Tabela}
+  \renewcommand\figurename{Rysunek}
+}
+
+\addto\captionspolish{%
+  \renewcommand\listtablename{Spis tabel}%
+}
 
 \newcommand{\snippet}[2]{
 
 \lstinputlisting[language=#1,basicstyle=\small,breaklines=true,showstringspaces=false]{Snippety/#2}
 
 }
-
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@caption}{\csname the#1\endcsname}{\csname fnum@#1\endcsname.}{}{}
+\renewcommand*\l@figure{\@dottedtocline{1}{0cm}{2.4cm}}
+\let\l@table\l@figure
+\makeatother
 
 \begin{document}
 \begin{titlepage}
 	\centering
 	{\scshape\LARGE Politechnika Wrocławska \par}
-	\vspace{1cm}
+	\vspace{0.2cm}
 	{\scshape\Large Wydział Elektroniki\par}
+	\noindent\hrulefill\\
+	\vspace{2cm}
+	{\huge\bfseries PROJEKT Z BAZ DANYCH\par}
 	\vspace{1.5cm}
-	{\huge\bfseries Internetowy sklep sportowy oparty o relacyjną bazę danych\par}
+	{\LARGE\bfseries Internetowy sklep sportowy oparty o relacyjną bazę danych\par}
 	\vspace{2cm}
 
-	\begin{flushright}
-	\Large Prowadzący zajęcia:\par
-	\large Dr~inż. Robert Wójcik\\
-	\end{flushright}
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft}
+	{\large Autorzy:\par}
+	{Tomasz Bartos - 209248\par}
+	{Jakub Dymon - 200335\par}
+	{Wiktor Gerstenstein - 209138\par}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.55\textwidth}
+\begin{flushright}
+{\large Prowadzący zajęcia:\ \ \ \ \ \ \ \ \ \ \par}
+{Dr~inż. Robert Wójcik, W4/K-9\par}
+\end{flushright}
+\end{minipage}
 
-    \begin{flushleft}
-	{\Large Autorzy:\par}
-	{\large Tomasz Bartos - 209248\par}
-	{\large Jakub Dymon - 200335\par}
-	{\large Wiktor Gerstenstein - 209138\par}
-	\end{flushleft}
+\vspace{2cm}
+
+\begin{minipage}{0.6\textwidth}
+\begin{flushright}
+{OCENA PRACY:}
+\end{flushright}
+\end{minipage}
 	
-	\begin{minipage}{0.6\textwidth}
-	\begin{flushright}
-	\Large Ocena:
-	\end{flushright}
-	\end{minipage}
-	
-	\vfill
-	{\large Wrocław 2016\par}
+\vfill
+\noindent\hrulefill\\
+{\large Wrocław 2016\par}
 \end{titlepage}
 
 \pagenumbering{gobble}
@@ -62,11 +91,11 @@
 \setcounter{page}{1}
 
 \listoffigures
-\addcontentsline{toc}{section}{\listfigurename}
+\addcontentsline{toc}{section}{Spis rysunków}
 \cleardoublepage
 
 \listoftables
-\addcontentsline{toc}{section}{\listtablename}
+\addcontentsline{toc}{section}{Spis tabel}
 \cleardoublepage
 
 \section{Wstęp}
@@ -297,7 +326,6 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \item Tworzy rekord w tabeli z zamówieniami.
 \item Zwraca id utworzonego zamówienia.
 
-\snippet{SQL}{funkcja.sql}
 
 \end{itemize}
 \item Widok - listaTowarów
@@ -538,8 +566,8 @@ Testy zweryfikowały poprawność działania zaimplementowanych funkcjonalności
 \end{itemize}		  
 \end{itemize}
 \cleardoublepage
+\addcontentsline{toc}{section}{Literatura}
 \bibliographystyle {IEEEtran}
 \bibliography {bibliografia}
 \nocite {*}
-
 \end{document}
