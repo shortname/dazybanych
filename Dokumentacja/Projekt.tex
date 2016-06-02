@@ -52,10 +52,15 @@
 \tableofcontents
 \cleardoublepage
 
+\pagenumbering{Roman}
+\setcounter{page}{1}
+
 \listoffigures
+\addcontentsline{toc}{section}{\listfigurename}
 \cleardoublepage
 
 \listoftables
+\addcontentsline{toc}{section}{\listtablename}
 \cleardoublepage
 
 \section{Wstęp}
@@ -89,24 +94,24 @@ Funkcjonalności dla poszczególnych użytkowników systemu zebrano w~Tablicy~\r
 Diagram przypadków użycia zamieszczony został na Rysunku~\ref{fig:diagramPrzypadkowUzycia}.
 
 \begin{table}[H]
+	\centering
 	\caption[Tabela przypadków użycia]{Przypadki użycia dla poszczególnych użytkowników}
 	\label{tab:tabelaPrzypadkowUzycia}
-		\hskip-1.5cm\begin{tabular}{ l c c c c }
-			Operacja/Użytkownik & Sprzedawca & Kierownik & Klient & Administrator \\ \hline 
-			Zarządzanie kontami użytkowników & Tak & Nie & Nie & Nie \\ \hline
-			Sprzedawanie towaru & Tak & Nie & Nie & Nie \\ \hline 
-			Zarządzanie towarami w magazynie & Nie & Tak & Nie & Nie \\ \hline 
-			Zarządzanie sprzedawcami & Nie & Tak & Nie & Nie \\ \hline 
-			Zarządzanie kierownikami & Nie & Nie & Nie & Tak \\ \hline 
-			Przeglądanie raportów\\ sprzedaży & Nie & Tak & Nie & Tak \\ \hline 
-			Przeglądanie listy towarów & Nie & Nie & Tak & Nie \\ \hline
-			Przeglądanie listy zakupów & Nie & Nie & Tak & Nie \\ \hline
-			Zakup towarów & Nie & Nie & Tak & Nie \\ \hline								
+		\begin{tabular}{ l c c c c }
+			Operacja/Użytkownik & Sprzedawca & Kierownik & Klient \\ \hline
+			Zarządzanie kontami użytkowników & Tak & Nie & Nie \\ \hline
+			Sprzedaż towaru & Tak & Nie & Nie \\ \hline
+			Zarządzanie towarami w magazynie & Nie & Tak & Nie \\ \hline
+			Zarządzanie sprzedawcami & Nie & Tak & Nie \\ \hline
+			Przeglądanie raportów\\ sprzedaży & Nie & Tak & Nie \\ \hline
+			Przeglądanie listy towarów & Nie & Nie & Tak \\ \hline
+			Przeglądanie historii zakupów & Nie & Nie & Tak \\ \hline
+			Zakup towarów & Nie & Nie & Tak \\ \hline
 		\end{tabular}
 \end{table}
 
 \begin{figure}[H]
-	\includegraphics[width=12cm]{diagram_przypadkow_uzycia.jpg}
+	\includegraphics[width=13cm]{diagram_przypadkow_uzycia.jpg}
 	\caption[Diagram przypadków użycia]{Diagram przypadków użycia}
 	\label{fig:diagramPrzypadkowUzycia}
 \end{figure}
