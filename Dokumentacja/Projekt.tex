@@ -14,13 +14,21 @@
 \hypersetup{colorlinks=true, linkcolor=black}
 \usepackage{listings}
 \usepackage{verbatim}
+\lstset{
+  literate={ó}{{\'o}}1
+           {ę}{{\k e}}1
+           {ą}{{\k a}}1
+           {ł}{{\l{}}}1
+}
 
-\newcommand{\snippet}[2]{
+\newcommand{\snippet}[3]{
 
-\lstinputlisting[language=#1,basicstyle=\small,breaklines=true,showstringspaces=false]{Snippety/#2}
+\lstinputlisting[language=#1,basicstyle=\small,breaklines=true,showstringspaces=false,caption=#3]{Snippety/#2}
 
 }
 
+\renewcommand\lstlistingname{List.}
+\renewcommand\lstlistlistingname{Spis listingów}
 
 \begin{document}
 \begin{titlepage}
@@ -67,6 +75,10 @@
 
 \listoftables
 \addcontentsline{toc}{section}{\listtablename}
+\cleardoublepage
+
+\lstlistoflistings
+\addcontentsline{toc}{section}{\lstlistlistingname}
 \cleardoublepage
 
 \section{Wstęp}
@@ -266,12 +278,12 @@ Wydawanie zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą inte
 \paragraph{Tworzenie tabel}
 Inicjalizacja systemu bazodanowego odbywa~się za~pomocą usługi phpmyadmin. W~celu zalogowania do~usługi, należy wybrać w~przeglądarce internetowej adres \url{http://localhost/phpmyadmin} oraz wprowadzić dane logowania do~formularza przedstawionego na~Rysunku~\ref{fig:logowanieDophpMyAdmin}. Następnie należy wybrać z~menu opcję \textit{Import} (Rysunek \ref{fig:phpMyAdmin}), \textit{Import z pliku .sql}, podać ścieszkę do~przygotowanego pliku z~bazą danych i~zatwierdzić operację poprzez wybranie \textit{OK}.
 
-\snippet{SQL}{tworzenieTabel.sql}
+\snippet{SQL}{tworzenieTabel.sql}{Przykładowe zapytanie tworzące tabelę}
 
 \paragraph{Definiowanie ograniczeń}
 Ograniczenia dotyczące poprawności wprowadzanych danych przez użytkownika zaimplementowane są~w postaci \textit{triggerów}, które są~automatycznie ładowane do~bazy danych w~chwili importowania przygotowanego pliku \textit{.sql}.
 
-\snippet{SQL}{triggery.sql}
+\snippet{SQL}{triggery.sql}{Przykładowy wyzwalacz}
 
 \subsubsection{Implementacja mechanizmów przetwarzania danych}
 Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zrealizowane są za pomocą \textit{procedur}, \textit{funkcji} oraz \textit{widoków}. Wybrane mechanizmy stosowane w systemie zestawiono poniżej:
@@ -283,7 +295,7 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \item Aktualizuje stan magazynów.
 \item W przypadku wyczerpania zasobów na magazynie, usuwa rekord z tabeli.
 
-\snippet{SQL}{procedura.sql}
+\snippet{SQL}{procedura.sql}{Przykładowa procedura}
 
 \end{itemize}
 \item Procedura - filtrujProdukty
@@ -297,7 +309,7 @@ Mechanizmy przetwarzania danych pomiędzy systemem bazodanowym a bazą danych zr
 \item Tworzy rekord w tabeli z zamówieniami.
 \item Zwraca id utworzonego zamówienia.
 
-\snippet{SQL}{funkcja.sql}
+\snippet{SQL}{funkcja.sql}{Przykładowa funkcja}
 
 \end{itemize}
 \item Widok - listaTowarów
@@ -333,7 +345,6 @@ Serwis umożliwia także wygodną administrację dla użytkownika \textit{root},
 	\label{fig:phpMyAdmin}
 \end{figure}
 \subsection{Realizacja elementów aplikacji}
-\subsubsection{Obsługa menu}
 \subsubsection{Walidacja i filtracja}
 System zapewnia walidację po stronie aplikacji jak i bazy danych. Uzupełnianie pól w aplikacji jest analizowane z poziomu interfejsu użytkownika oraz w przypadku nieprawidłowości, natychmiast kierowane są do użytkownika stosowne ostrzeżenia. Po stronie systemu bazodanowego, przed złożeniem zamówienia, sprawdzany jest stan produktów na magazynach. W przypadku niewystarczającej ilości towarów, zamówienie jest wycofywane z~systemu i~użytkownik otrzymuje powiadomienie o niepowodzeniu operacji.
 \subsubsection{Implementacja interfejsu dostępu do bazy danych}
@@ -346,6 +357,8 @@ Dostęp do systemu odbywa się za pomocą interfejsu przedstawionego na~Rysunku~
 \end{figure}
 
 Użytkownik ma możliwość wyboru z listy rozwijanej (Rysunek~\ref{fig:listaRozwijana}) nazwy konta na które będzie realizowane zamówienie. Dodatkowo istnieje możliwość filtrowania listy aktualnie wyświetlonych produktów za pomocą panelu znajdującego się na~Rysunku~\ref{fig:panelFiltrowaniaProduktów}.
+
+\snippet{PHP}{polaczenieZBaza.php}{Połączenie z bazą danych z poziomu PHP}
 
 \begin{figure}[H]
 	\centering
@@ -361,9 +374,24 @@ Użytkownik ma możliwość wyboru z listy rozwijanej (Rysunek~\ref{fig:listaRoz
 
 \subsubsection{Implementacja wybranych funkcjonalności systemu}
 \paragraph{Przeglądanie listy towarów} \mbox{}\\
-System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Dodatkowo, jeżeli użytkownik poda listę producentów bądź listę kategorii, wywoływana jest procedura \textit{filtrujProdukty}, za pomocą której wydobywane są dane spełniające zadane kryteria. Dane są zwracane jako widok listaTowarów.
+System wykonuje zapytanie do bazy danych o zestawienie danych dotyczących produktów wraz z podaniem aktualnego stanu ze wszystkich magazynów. Zapytanie sprowadza się do wywołania procedury \textit{filtrujProdukty}, która zwraca widok \textit{lista\_towarow} z posumowanymi stanami ze wszystkich magazynów. Ponadto, jeżeli jako parametry procedury zostanie podana lista id producentów i/lub lista id kategorii, zwrócone zostaną jedynie te rekordy, których kategorie czy produkty znajdą się na podanych listach.
+\paragraph{Filtrowanie produktów} \mbox{}\\
+Podczas przeglądania tabeli dostępnych produktów użytkownik może dokonać filtracji poprzez wybranie w panelu bocznym z~Rysunku~\ref{fig:panelFiltrowaniaProduktów} producentów bądź kategorii. Po naciśnięciu przycisku \textit{Filtruj} wywoływana jest procedura \textit{filtrujProdukty} zwracająca widok. Następnie dane są wyświetlane użytkownikowi. Przykładowy wynik operacji zamieszczono na~Rysunku~\ref{fig:rezultatFiltracji}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{Screeny/Filtrowanie2.JPG}
+	\caption[Widok tabeli towarów po filtracji]{Widok tabeli towarów po filtracji}
+	\label{fig:rezultatFiltracji}
+\end{figure}
+
+\snippet{HTML}{filtrujProdukty.php}{Wywołanie i wyświetlenie wyników procedury \textit{filtrujProdukty}}
+
 \paragraph{Tworzenie zamówienia} \mbox{}\\
-Po wybraniu przez klienta wybranych produktów i naciśnięciu przycisku \textit{Zamów} tworzone jest zamówienie za pomocą funkcji otworzZamowienie. Następnie wybrane przez klienta pozycje są dodawna do zamówienia za pomocą procedury \textit{dodajDoZamowienia}. Po uzupełnieniu danych transakcja kierowana jest do bazy danych, gdzie przed wstawieniem każdego rekordu przechodzi przez proces walidacji. Sprawdzana jest poprawność semantyczna wprowadzonych rekordów oraz logiczna w postaci porównania ilości towarów ze stanem na magazynach. W rezultacie zwracane jest \textit{ID} utworzonego zamówienia. W przypdaku niepowodzenia, transakcja jest wycofywana z systemu. Możliwy stan operacji przedstawiono na~Rysunkach~\ref{fig:stanZamówieniaPowodzenie}~oraz~\ref{fig:stanZamówieniaNiepowodzenie}.
+Po wybraniu przez klienta produktów wraz z ilościami i naciśnięciu przycisku \textit{Zamów} zostaje otwarta transakcja do bazy danych. Pierwsza w tej transakcji jest wywoływana funkcja \textit{otworzZamowienie}, która tworzy wpis w tabeli \textit{zamowienia} i zwraca jego id. Następnie każdy z zamawianych produktów jest sprawdzany pod kątem dostępności i jeżeli jest go wystarczająca ilość wywowływana jest dla niego procedura \textit{dodajDoZamowienia}, która odejmuje odpowiednią ilość z tabeli \textit{zaopatrzenie} (bądź kasuje rekord, jeżeli ilość spadła do zera) i tworzy nowy rekord w tabeli \textit{zamowienia\_produkty}. Jeżeli przy jednym z produktów zdarzy się, że jest go niewystarczająca ilość, następuje rollback transakcji. W innym wypadku cała transakcja jest commitowana do bazy.
+Użytkownik jest informowany o powodzeniu (rys. \ref{fig:stanZamówieniaPowodzenie}) lub niepowodzeniu (rys. \ref{fig:stanZamówieniaNiepowodzenie}) operacji.
+
+\snippet{PHP}{zamowienie.php}{Skrypt PHP odpowiadający za stworzenie zamównienia}
 
 \begin{figure}[H]
 	\centering
@@ -374,15 +402,6 @@ Po wybraniu przez klienta wybranych produktów i naciśnięciu przycisku \textit
 	\includegraphics[width=5cm]{Screeny/ZamowienieNiepoprawne.JPG}
 	\caption[Stan zamówienia - niepowodzenie operacji]{Komunikat o stanie utworzonego zamówienia - niepowodzenie operacji}
 	\label{fig:stanZamówieniaNiepowodzenie}
-\end{figure}
-\paragraph{Filtrowanie produktów} \mbox{}\\
-Podczas przeglądania tabeli dostępnych produktów użytkownik może dokonać filtracji poprzez wybranie w panelu bocznym z~Rysunku~\ref{fig:panelFiltrowaniaProduktów} producentów bądź kategorii. Po naciśnięciu przycisku \textit{Filtruj} wywoływana jest procedura \textit{filtrujProdukty} zwracająca widok. Następnie dane są wyświetlane użytkownikowi. Przykładowy wynik operacji zamieszczono na~Rysunku~\ref{fig:rezultatFiltracji}.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=14cm]{Screeny/Filtrowanie2.JPG}
-	\caption[Widok tabeli towarów po filtracji]{Widok tabeli towarów po filtracji}
-	\label{fig:rezultatFiltracji}
 \end{figure}
 
 \subsubsection{Implementacja mechanizmów bezpieczeństwa}
@@ -427,7 +446,7 @@ Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację 
 	\item Pobierz projekt z repozytorim \url{https://github.com/shortname/dazybanych/archive/master.zip}
 	\item Rozpakuj pobrane archiwum w wybranej lokalizacji.
 	\item Znajdź w folderze, gdzie zainstalowałeś XAMPP`a plik apache/conf/extra/httpd-vhosts.conf
-	\item Dopisz na końcu znalezionego pliku tekst \lstinputlisting{wklejka.txt}, zamieniając XXX na ścieżkę do katalogu z pobranym projektem.
+	\item Dopisz na końcu znalezionego pliku tekst \lstinputlisting[nolol=true]{wklejka.txt}, zamieniając XXX na ścieżkę do katalogu z pobranym projektem.
 	\item Uruchom serwer \quotedblbase Apache\textquotedblright z poziomu \quotedblbase XAMPP Control Panel\textquotedblright
 	\item Wejdź do przeglądarki internetowej
 	\item Wejdź na \url{http://localhost}. Jeżeli zobaczyłeś stronę \quotedblbase Hello world!\textquotedblright, to znaczy, że operacja powiodła się
@@ -479,6 +498,7 @@ Testowanie funkcjonalności odbywało się za~pomocą środowiska \textit{Seleni
 \item Zasymulowanie zmian na podanych rekordach oraz na tabelach `zamowienia` i `zamowienia\_produkty`.
 \item Porównanie stanu bazy danych przed i po transakcji.
 \end{enumerate}
+
 \subsubsection{Testowanie filtrowania}
 \paragraph{Zależności do sprawdzenia}
 \begin{itemize}
@@ -492,6 +512,9 @@ Testowanie funkcjonalności odbywało się za~pomocą środowiska \textit{Seleni
 \item Stworzenie zamówienia dla dwóch różnych klientów.
 \item Sprawdzenie czy dane z tabel zamówienia, zamówienia\_produkty oraz zaopatrzenie zostały zmodyfikowane.
 \end{enumerate}
+
+\snippet{Java}{testZamowienia.java}{Fragment przykładowego testu}
+
 \subsection{Testowanie mechanizmów bezpieczeństwa}
 Zabezpieczenia interfejsu użytkownika przed niepoprawnym formatem danych zostały sprawdzone pod kątem przekroczenia stanu towarów na magazynie oraz poprawnej sygnalizacji błędów ze strony aplikacji. Rezultat testu przedstawiono na~Rysunku~\ref{fig:walidacja1} i~\ref{fig:walidacja2}.
 
