@@ -118,6 +118,7 @@ System pozwala sprzedawcy na~dodawanie towarów do~sklepu, wystawianie ich~do~sp
 	\item Klienta
 \end{itemize}
 Zależnie od~rodzaju konta udostępniana jest określona wersja serwisu.
+\cleardoublepage
 \section{Analiza wymagań}
 \subsection{Opis działania i schemat logiczny systemu}
 \paragraph{Opis działania} \mbox{}\\
@@ -134,7 +135,7 @@ Schemat logiczny systemu znajduje się na~Rysunku~\ref{fig:schematLogiczny}.
 
 \subsection{Wymagania funkcjonalne}
 \subsubsection{Diagram przypadków użycia}
-Funkcjonalności dla poszczególnych użytkowników systemu zebrano w~Tablicy~\ref{tab:tabelaPrzypadkowUzycia}.
+Funkcjonalności dla poszczególnych użytkowników systemu zebrano w~Tabeli~\ref{tab:tabelaPrzypadkowUzycia}.
 Diagram przypadków użycia zamieszczony został na Rysunku~\ref{fig:diagramPrzypadkowUzycia}.
 
 \begin{table}[H]
@@ -224,6 +225,7 @@ Baza danych powinna przechowywać dane kilkuset artykułów sportowych wraz z~ic
 \end{itemize}
 \subsection{Przyjęte założenia projektowe}
 System powinien być prosty w~obsłudze i~intuicyjny dla użytkownika, dodatkowo musi prawidłowo realizować swoje funkcjonalności i~prowadzić ciągły nadzór nad~danymi wprowadzanymi przez użytkownika a~także na~bieżąco informować o~wszelkich nieprawidłowościach. Czas przetwarzania dancyh oraz kierowanych zapytań nie~może~przekraczać kilku sekund.
+\cleardoublepage
 \section{Projekt systemu}
 \subsection{Projekt bazy danych}
 \subsubsection{Analiza rzeczywistości i uproszczony model konceptualny}
@@ -297,7 +299,7 @@ Aplikacja zbudowana jest w~oparciu o~część webową w~postaci strony interneto
 Komunikacja z~bazą danych ze~strony serwerowej odbywa się za~pomocą biblioteki języka PHP, umożliwiającej wydawanie zapytań SQL.
 \subsubsection{Projekt zabezpieczeń na poziomie aplikacji}
 Wydawanie zapytań ze~strony aplikacji możliwe jest wyłącznie za~pomocą interfejsu dostępowego. Wszelkie operacje związane z~bazą danych są~ukryte poprzez interfejs użytkownika, w~związku z~czym nie~jest możlie uzyskanie dostępu do~danych w~sposób inny, niż ten oferowany przez aplikację.
-
+\cleardoublepage
 \section{Implementacja systemu}
 \subsection{Realizacja bazy danych}
 \subsubsection{Tworzenie tabel i definiowanie ograniczeń}
@@ -434,10 +436,10 @@ Użytkownik jest informowany o powodzeniu (rys. \ref{fig:stanZamówieniaPowodzen
 \paragraph{Sprawdzanie stanu magazynów} \mbox{}\\
 Mechanizmy bezpieczeństwa systemu opierają się o~sprawdzenie ilości stanu danych na~magazynie, co~sprowadza się do~kierowania zapytań do~bazy danych o~aktualny stan towarów i~uniemożliwienie użytkownikowi wybrania większej ilości niż jest dostępne.
 \paragraph{Triggery} \mbox{}\\
-Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację rekordów bazy poprzez zastosowanie wyrażeń regularnych. W systemie są wykorzystywane podczas wstawiania rekordów do tabel, w przypadku niezgodności z wyrażeniem rekord jest odrzucany. Wybrane triggery zaimplementowane w~systemie zestawiono w~Tablicy~\ref{tab:tabelaTrigerów}.
+Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację rekordów bazy poprzez zastosowanie wyrażeń regularnych. W systemie są wykorzystywane podczas wstawiania rekordów do tabel, w przypadku niezgodności z wyrażeniem rekord jest odrzucany. Wybrane triggery zaimplementowane w~systemie zestawiono w~Tabeli~\ref{tab:tabelaTrigerów}.
 
 \begin{table}[H]
-	\caption[Tablica wybranych triggerów]{Tablica wybranych triggerów zaimplementowanych w systemie}
+	\caption[Tabela wybranych triggerów]{Tabela wybranych triggerów zaimplementowanych w systemie}
 	\label{tab:tabelaTrigerów}
 		\hskip-1cm\begin{tabular}{ l l }
 			Trigger & Wyrażenie regularne \\ \hline
@@ -450,7 +452,7 @@ Dodatkowym zaimplementowanym mechanizmem są trigery pozwalające na walidację 
 		\end{tabular}
 \end{table}
 
-
+\cleardoublepage
 \section{Testowanie systemu}
 \subsection{Instalacja i konfigurowanie systemu}
 \paragraph{Do pobrania}
@@ -565,27 +567,23 @@ Sprawdzono także odporność bazy danych na~nieporawny format danych w~przypadk
 Weryfikacja odporności bazy danych na~ataki SQL Injection nie~była konieczna, ze~względu na~zabezpieczenie bazy danych przed nieupoważnionymi użytkownikami oraz ukryciem istnienia bazy danych przed klientem. Wszystkie zapytania obsługiwane są~za~pomocą aplikacji dostępowej, użytkownik nie~ma~możliwości wykonania zapytania bez~pośrednictwa systemu.
 \subsection{Wnioski z testów}
 Testy zweryfikowały poprawność działania zaimplementowanych funkcjonalności. Ich różnorodność pozwoliła na~sprawdzenie systemu na~różnych poziomach abstrakcji. Zastosowanie testów sprawdzających działanie interfejsu poprzez symulowanie zachowania użytkownika pozwoliło na~sprawdzenie systemu w~środowisku jak~najbardziej zbliżonym do~rzeczywistego użytkowania. Wszystkie testy zwróciły wynik pozytywny.
+\cleardoublepage
 \section{Podsumowanie}
-%Celem zadania było zaprojektowanie i zaimplementowanie relacyjnej bazy danych na potrzeby internetowego sklepu sportowego.
-%Pierwszym krokiem było określenie przypadków użycia projektowanej aplikacji, które zebrano w formie diagramu. Kolejnym etapem fazy projektowej było stworzenie modelu konceptualnego, który obrazował relacje zachodzące pomiędzy zaplanowanymi tabelami. Gdy te zależności zostały określone,  
-\begin{itemize}
-	\item Cel projektu: zaprojektowanie i implementacja relacyjnej bazy danych na potrzeby sportowego sklepu internetowego; stworzenie prostej webowej aplikacji do obsługi wybranych funkcjonalności; przetestowanie funkcjonalności
-	\item Kroki:
-		\begin{itemize}
-		\item Analiza rzeczywistości - zebranie wymagań funkcjonalnych i niefunkcjonalnych (funkcjonalnych w formie diagramu przypadków użycia)		
-		\item Stworzenie diagramu konceptualnego - określenie jakie tabele będą potrzebne i jakie relacje między nimi zachodzą
-		\item Diagram logiczny - co w tych tabelach będzie
-		\item Diagram fizyczny - jakie typy bazodanowe są potrzebne, normalizacja(?)
-		\item Dobór narzędzi i technologii
-		\item Stworzenie tabel
-		\item Stworzenie relacji pomiędzy tabelami (klucze obce)
-		\item Triggery - walidacja danych wchodzących do bazy
-		\item Widok
-		\item Porcedury i funkcja - wykorzystanie wszystkich możliwości bazy danych (odciążenie back-endu)
-		\item Aplikacja webowa - pokazanie, że stworzona baza może być praktycznie wykorzystana
-		\item Testy funkcjonalne - sprawdzenie, czy mechanizmy bazodanowe funkcjonują poprawnie; ułatwienia dalszego rozwoju aplikacji
-\end{itemize}		  
-\end{itemize}
+\paragraph{Cel projektu} \mbox{}\\
+Celem projektu było zaprojektowanie oraz zaimplementowanie relacyjnej bazy danych na~potrzeby sportowego sklepu internetowego i stworzenie prostej webowej aplikacji do~obsługi wybranych funkcjonalnośi. Dodatkowo, w~celu weryfikacji poprawności działania systemu z~bazą danych, przeprowadzone zostały wielopoziomowe testy integracyjne.
+
+\paragraph{Analiza wymagań} \mbox{}\\
+Pierwszym etapem pracy było zebranie wymagań od~klienta oraz przeprowadzenie analizy rzeczywistości. Na~podstawie zebranych informacji określone zostały przypadki użycia i~zebrane w~formie diagramu. Kolejnym etapem fazy projektowej było stworzenie modelu konceptualnego, który obrazował relacje zachodzące pomiędzy zamodelowanymi tabelami. Gdy powyższe zależności zostały określone, rozpoczęto prace nad diagramem logicznym, pozwalającym dokładnie określić relacje pomiędzy encjami, oraz modelem fizycznym, dokładnie opisującym typy danych i~fizyczną strukturę działającego systemu bazodanowego.
+
+\paragraph{Projekt systemu} \mbox{}\\
+W fazie projektowej dobrane zostały narzędzia i~technologie za pomocą których zrealizowana została strony bazy danych jak i~aplikacja dostępowa. Wymagania technologiczne wyspecyfikowane zostały w~kontekście tematu zadania projektowego, dzięki czemu na~etapie projektowania udało się zapobiec późniejszym problemom integracyjnym oraz lepiej dopasować efekt końcowy do~oczekiwań klienta. Baza danych realizowna była w~oparciu o~wolnodostępny system zarządzania relacyjnymi bazami danych MySql. Aplikacja webowa oparta była po~stronie serwerowej o~język PHP, natomiast od~strony interfejsu użytkownika o~stronę internetową napisaną w~języku HTML. W~celu zapewnienia najwyższej jakości usług, system zaprojektowano z~myślą o~zabezpieczeniach przed nieautoryzowanym dostępem a~także walidacją niepoprawnych danych zarówno po~stronie bazy danych jak i~aplikacji dostępowej.
+
+\paragraph{Implementacja systemu} \mbox{}\\
+System zrealizowano z~założeniem, aby jak największega część przetwarzania informacji odbywała sie po~stronie bazy danych. Do~weryfikacji wprowadzanych danych wykorzystane zostały triggery, dzięki którym odbywała się walidacja za~pomocą wyrażeń regularnych w~chwili modyfikacji rekordów w~tabelach, co pozwoliło na~uniknięcie niespójności danych. Dodatkowo wykorzystane zostały procedury oraz funkcje, umożliwiające realizowanie bardziej złożonych zapytań przy pomocy uproszczonych zapytań. W~celu zestawienia większej ilości danych użytkownikowi wykorzystany został widok, którego zadaniem była agregacja danych z~wielu tabel i~przedstawienie ich w~zrozumiałej i~czytelnej formie. W związku z~przeniesieniem dużej ilości funkcjonalności związanych z~przetwarzaniem informacji na stronę bazy danych, udało się odciążyć stronę serwerową oraz zapewnić wyższą wydajność interfejsu dostępowego.\\\\
+Aplikacja webowa stworzona została z~myślą o~ułatwieniu użytkownikowi dostępu do danych, odciążeniu go z~potrzeby znajomości języka SQL a~także umożliwienia łatwego i~wygodnego zestawiania i~modyfikowania danych dotyczących zamówień produktów. Do~zadań aplikacji można zaliczyć odbieranie zapytań od~użytkownika, kierowanie ich do~systemu bazodanowego oraz zwracanie danych w przejrzystej formie. Dodatkowo aplikacja wspierała dwuwarstwową walidację danych, zarówno ze~strony serwerowej w~języku PHP jak i~strony internetowej HTML. Stan kierowanych zapytań wyświetlany był w~formie komunikatów, gdzie wszelkie błędy związane z~niepoprawnością danych były natychmiast zgłaszane użytkownikowi.
+
+\paragraph{Testowanie systemu} \mbox{}\\
+Zadaniem przeprowadzonych testów było zweryfikowanie poprawności działania systemu a~także ułatwienie dalszego rozwoju aplikacji, poprzez wczesne wykrycie błędów w~dotychczas zaimplementowanych funkcjonalnościach. Docelowy produkt przetestowany został na~wielu poziomach abstrakcji, zarówno po~stronie samej bazy danych jak i~interfejsu. W celu sprawdzenia poprawności działania mechanizmów ochronnych bazy danych, została ona~odłączona od~reszty systemu a~następnie poddana próbom ręcznego wprowadzenia niepoprawnych danych. Dodatkowo dzięki wykorzystaniu biblioteki specjalistycznych narzędzi, sprawdzono poprawność działania aplikacji dostępowej, poprzez automatyzację testów sterujących zapytaniami do~bazy danych, symulujących interakcję pomiędzy interfejsem a~użytkownikiem a~także symulację zachowania bazy danych w~celu porównania otrzymywanych danych. Poza testami funkcjonalnymi obrazującymi praktyczne działanie systemu, opracowana została również kompleksowa dokumentacja techniczna, pozwalająca administratorowi na~zestawienie środowiska, uruchomienie produktu a~także na~modyfikowanie danych jak i~nadzorowanie pracy systemu.
 \cleardoublepage
 \addcontentsline{toc}{section}{Literatura}
 \bibliographystyle {IEEEtran}
